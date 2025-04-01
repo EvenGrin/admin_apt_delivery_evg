@@ -1,0 +1,37 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+<div id="head" class="d-flex justify-content-between flex-wrap align-items-center py-2">
+    <h2 class=" ps-0  px-3 ">Корзина</h2>
+
+
+</div>
+{% comment %}{% if carts %}{% endcomment %}
+
+<div id="cart_buttons" class="d-flex gap-1 sticky-top justify-content-end pb-2 z-1" style="top:80px">
+    <button class="cart_empty btn btn-danger shadow">Очистить корзину</button>
+    <button class="create_order btn btn-primary shadow" data-bs-toggle="modal" data-bs-target="#CreateOrderModal">
+        Оформить заказ <span id="total_price">{{total_price}}</span>р
+    </button>
+</div>
+{% comment %}{% endif %}{% endcomment %}
+
+{% include 'cart/elements/cart_modal.html'%}
+
+{% include 'cart/elements/cart_items.html' %}
+
+
+
+{% endblock %}
+{% block extra_body %}
+<script>
+    let url_add='{% url 'add_to_cart' %}'
+    let url_sub='{% url 'sub_from_cart' %}'
+    let url_remove='{% url 'remove_from_cart' %}'
+</script>
+<script src="{% static 'js/cart/form_style.js'%}"></script>
+<script src="{% static 'js/cart/ajax_for_cart_modal_form.js' %}"></script>
+<script src="{% static 'js/home/add_sub_remove.js' %}"></script>
+
+{% endblock %}

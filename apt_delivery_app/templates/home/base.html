@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% block head%}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-icons-1.11.3/font/bootstrap-icons.css'%}">
+    <script defer src="{% static 'js/home/dragscroll.js' %}"></script>
+    <script src="{% static 'js/home/jquery-3.7.1.js' %}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block extra_head %}{% endblock %}
+</head>
+{% include 'home/css/style.html'%}
+<body class="d-flex flex-column min-vh-100 container">
+{% include 'home/elements/header.html' %}
+<main class="my-4">
+    {% if messages %}
+    <ul class="list-unstyled messages">
+        {% for message in messages %}
+        <li {% if message.tags %}
+            class="alert
+                        {% if message.tags == 'error' %}
+                            alert-danger
+                        {% else %}
+                            alert-{{ message.tags }}
+                        {% endif %}
+                            alert-dismissible fade show"
+                {% endif %}
+            role="alert"
+
+        >
+            {% if message.tags == 'error' or message.tags == 'warning' %}
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            {% elif message.tags == 'success' %}
+            <i class="bi bi-check-circle-fill"></i>
+            {% elif message.tags == 'info' %}
+            <i class="bi bi-info-circle-fill"></i>
+            {% endif %}
+            <pre>
+                {{ message }}
+            </pre>
+
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+</main>
+{% include 'home/elements/footer.html' %}
+<script src="{% static 'js/bootstrap/bootstrap.bundle.js' %}"></script>
+<script src="{% static 'js/home/center_nav.js'%}"></script>
+{% block extra_body %}{% endblock %}
+</body>
+</html>

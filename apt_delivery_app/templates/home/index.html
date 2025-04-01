@@ -1,0 +1,60 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+{% if not search %}
+{% include 'home/elements/aside.html' %}
+{% endif %}
+<section data-bs-spy="scroll" data-bs-smooth-scroll="true" class="row" tabindex="0">
+    <form id="changelist-search" method="get">
+        <div><!-- DIV needed for valid HTML -->
+            <label for="searchbar"><img src="{% static 'admin/img/search.svg' %}" alt="Search"></label>
+            <input type="text" size="40" name="q" value="" id="searchbar" autofocus="">
+            <input type="submit" value="Найти">
+
+        </div>
+    </form>
+    {% if search %}
+    <div>
+    <div>
+        <h2>Найдено {{search_count}} по: {{search}}</h2>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2  row-cols-xl-3 g-3">
+        {% for meal in search_result %}
+        {% include 'home/elements/meals_cards.html' %}
+        {% empty %}
+        <div class="col w-100">
+            {% include 'home/elements/danger.html' with text="Ничего не найдено"%}
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+    {% else %}
+    {% for category in meals %}
+    <div id="cat_{{category.id}}" class="pb-5">
+        <div>
+            <h2>{{category.name}}</h2>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2  row-cols-xl-3 g-3">
+            {% for meal in category.ordered_meals %}
+            {% include 'home/elements/meals_cards.html' %}
+            {% empty %}
+            <div class="col w-100">
+                {% include 'home/elements/danger.html' with text="Ничего не найдено"%}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    {% endif%}
+</section>
+{% endblock %}
+{% block extra_body %}
+<script>
+    let url_add='{% url 'add_to_cart' %}'
+    let url_sub='{% url 'sub_from_cart' %}'
+    let url_remove='{% url 'remove_from_cart' %}'
+</script>
+<script src="{% static 'js/home/add_sub_remove.js' %}">
+</script>
+{% endblock %}

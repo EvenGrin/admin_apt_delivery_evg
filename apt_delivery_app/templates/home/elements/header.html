@@ -1,0 +1,115 @@
+<header class="sticky-top z-3  ">
+    <nav class="navbar navbar-expand-lg bg-primary rounded" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">АптДоставка</a>
+            <button aria-controls="navbarOffcanvasLg" aria-label="Toggle navigation" class="navbar-toggler"
+                    data-bs-target="#navbarOffcanvasLg"
+                    data-bs-toggle="offcanvas" type="button">
+                <span class="bi bi-three-dots"></span>
+            </button>
+            <div aria-labelledby="navbarOffcanvasLgLabel" class="offcanvas offcanvas-start bg-primary"
+                 data-bs-theme="dark"
+                 id="navbarOffcanvasLg" tabindex="-1">
+                <div class="offcanvas-header px-4 pb-0">
+                    <h5 class="offcanvas-title text-white">
+                        АптДоставка
+                    </h5>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="offcanvas" type="button"></button>
+
+                </div>
+                <div class="px-4">
+                    <hr class="d-lg-none text-white-50 mb-0">
+                </div>
+                <div class="offcanvas-body p-4 pt-2 p-lg-0">
+                    <ul class="navbar-nav mb-2 mb-lg-0 ">
+                        <li class="nav-item ">
+                            <a aria-current="page"
+                               class="nav-link text-white d-flex align-items-center" href="{% url 'home' %}">Главная</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a aria-current="page"
+                               class="nav-link text-white d-flex align-items-center" href="{% url 'menu' %}">Меню</a>
+                        </li>
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a aria-current="page"
+                               class="nav-link text-white d-flex align-items-center" href="{% url 'cart' %}">Корзина
+                                <span class="material-icons-outlined">shopping_cart </span>
+                                <span class="badge cart_info text-bg-secondary">{% if cart_count %}{{cart_count}}{% endif %}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a aria-current="page"
+                               class="nav-link text-white d-flex align-items-center" href="{% url 'order' %}">Заказы
+                                <span class="material-icons">room_service</span>
+                                <span class="badge order_info text-bg-secondary">{% if order_count %}{{order_count}}{% endif %}</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <hr class="d-lg-none text-white-50">
+
+
+                </div>
+            </div>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarText">
+
+            </div>
+            <div class="form-inline order-lg-3">
+                <ul class="navbar-nav d-flex flex-row align-items-center justify-content-center">
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <button aria-expanded="false" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                            {{user.last_name}}
+                            {{user.first_name|slice:"1"}}.
+                            {%if user.patronymic %}
+                            {{user.patronymic|slice:"1"}}.
+                            {%endif%}
+                        </button>
+                        <ul class="dropdown-menu position-absolute dropdown-menu-end">
+                            {% if request.user.is_authenticated %}
+                            {% if user.is_superuser %}
+                            <li class="">
+                                <a class="dropdown-item d-flex align-items-center"
+                                   href="/admin"
+                                   target="_blank">
+                                    АдминПанель
+                                    <span class="material-icons"> admin_panel_settings</span>
+                                </a>
+                            </li>
+                            {% elif request.user.is_deliver %}
+                            <li class="">
+                                <a class="dropdown-item d-flex align-items-center"
+                                   href="{% url 'deliver'%}">Доставка
+                                    <span class="material-icons">directions_run</span></a>
+                            </li>
+                            {% elif request.user.is_operator %}
+                            <li class="">
+                                <a class="dropdown-item d-flex align-items-center"
+                                   href="{% url 'deliver'%}">Оператор
+                                    <span class="bi bi-person-workspace"></span>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% endif %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Выход</a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white px-2" href="{% url 'registration' %}">Регистрация</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'login' %}">Войти</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

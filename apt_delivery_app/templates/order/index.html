@@ -1,0 +1,107 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %}Заказы{% endblock %}
+{% block content %}
+<!--<button type="button" class="btn btn-primary" id="liveToastBtn">Показать лайв тосты</button>-->
+<!-- возможно создам уведомления -->
+<!--<div class="toast-container position-fixed bottom-0 end-0 p-3">-->
+<!--    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">-->
+<!--        <div class="toast-header">-->
+<!--            <strong class="me-auto">Bootstrap</strong>-->
+<!--            <small>11 мин назад</small>-->
+<!--            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>-->
+<!--        </div>-->
+<!--        <div class="toast-body">-->
+<!--            Привет, мир! Это тост-сообщение.-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="d-flex justify-content-between flex-wrap align-items-center">
+    <h2 class=" ps-0  px-3 py-2">Заказы</h2>
+    <div class="d-flex justify-content-end z-1">
+        <button class="view_all btn btn-primary position-fixed " style="top:80px;">Раскрыть все</button>
+    </div>
+</div>
+<div class="d-flex flex-wrap align-items-center justify-content-between  z-1 rounded-2 overflow-hidden     mb-4"
+    style="top: 80px;">
+    <div class="mb-1">Сортировать по</div>
+    <div class="btn-group overflow-x-auto dragscroll flex-row ">
+        <a href="{% url 'order' order_by='-date_create' filter=filter %}"
+            class="btn btn-primary rounded-0 d-flex px-4 align-items-center justify-content-center px-4 py-2">
+            Дате создания заказа
+        </a>
+        <a href="{% url 'order' order_by='-order_date' filter=filter %}"
+            class="btn btn-primary rounded-0 d-flex px-4 align-items-center justify-content-center px-4 py-2">
+            Дате получения заказа
+        </a>
+    </div>
+</div>
+<div class="d-flex flex-wrap align-items-center justify-content-between  z-1 rounded-2 overflow-hidden     mb-4"
+    style="top: 80px;">
+    <div class="mb-1">Фильтровать по статусу</div>
+    <div class="btn-group overflow-x-auto dragscroll flex-row ">
+        <a href="{% url 'order' %}"
+            class="btn btn-primary rounded-0 d-flex px-4 align-items-center justify-content-center px-4 py-2">
+            Все
+        </a>
+        {% for status in statuses %}
+        <a href="{% url 'order' order_by=order_by filter=status.id %}"
+            class="btn btn-primary rounded-0 d-flex px-4 align-items-center justify-content-center px-4 py-2 {% if status.id == filter %}disabled{% endif %}">
+            {{ status.name }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% include 'order/elements/order_item.html'%}
+
+
+
+{% endblock %}
+{% block extra_body %}
+<script>
+    let url_add = "{% url 'add_to_order' %}"
+    let url_sub = "{% url 'sub_from_order' %}"
+    let url_remove = "{% url 'remove_from_cart' %}"
+
+</script>
+<script src="{% static 'js/order/order_view_close.js' %}"></script>
+<script src="{% static 'js/home/add_sub_remove.js' %}">
+</script>
+<script>
+    $(document).ready(function () {
+        $(document).submit((ev) => {
+            ev.preventDefault()
+            pk = $(ev.target).data('order-id')
+            $.ajax({
+                url: "{% url 'order_update' %}",
+                method: 'POST',
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                data: $(ev.target).serialize()+ '&pk=' + pk,
+                success: (data) => {
+                    console.log(data)
+                    console.log($(ev.target).find('textarea[name="user_comment"]').html(data.user_comment))
+                }
+            }
+
+
+
+            )
+        })
+        const toastTrigger = $('.order_update')
+        const toastLiveExample = $('#liveToast')
+        // if (toastTrigger) {
+        //     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+        //     toastTrigger.on('click', () => {
+        //         console.log(0)
+        //         $.post(
+        //             "{% url 'order_update' %}",
+        //         )
+        //         // toastBootstrap.show()
+        //     })
+        // }
+    })
+
+
+</script>
+{% endblock %}
