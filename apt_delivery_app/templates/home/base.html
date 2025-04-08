@@ -12,8 +12,9 @@
     <script src="{% static 'js/home/jquery-3.7.1.js' %}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block extra_head %}{% endblock %}
+    {% include 'home/css/style.html'%}
 </head>
-{% include 'home/css/style.html'%}
+
 <body class="d-flex flex-column min-vh-100 container">
 {% include 'home/elements/header.html' %}
 <main class="my-4">

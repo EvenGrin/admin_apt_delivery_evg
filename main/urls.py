@@ -10,6 +10,7 @@ urlpatterns = [
     path('favicon.ico', lambda _ : redirect('static/images/logo.png', permanent=True)),
 #
     path('admin/', admin.site.urls),
+    path('admin_app/', include('admin_app.urls')),
 #
     path('', views.meal_list, name="home"),
     path('menu', views.menu, name='menu'),
