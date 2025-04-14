@@ -36,12 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    # 'home',
-    # 'cart',
-    # 'order',
-    # 'log_reg',
-    # 'deliver',
     'apt_delivery_app',
+    'admin_app',
 ]
 
 MIDDLEWARE = [
