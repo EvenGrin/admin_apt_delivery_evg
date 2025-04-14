@@ -1,0 +1,34 @@
+{% extends 'admin_app/base.html' %}
+{% block content %}
+<div class="border rounded  table-responsive sticky-under-top" style="">
+    <table class="table table-hover table-bordered table-striped m-0">
+        <thead class="sticky-top z-0">
+        <tr>
+            <th>Фото</th>
+            <th>Название</th>
+            <th>Категория</th>
+            <th>Цена</th>
+            <th>Выход</th>
+            <th>К-во</th>
+            <th>К-во заказанных</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for meal in meals %}
+        <tr>
+            <td class='meals_photo'>
+                <img class='rounded img-thumbnail' src='{{meal.image.url}}'
+                     alt="катринка с блюдом"/>
+            </td>
+            <td>{{meal.name}}</td>
+            <td>{{meal.category}}</td>
+            <td>{{meal.price}}</td>
+            <td>{{meal.out}}</td>
+            <td>{{meal.quantity}}</td>
+            <td>{{meal.sold_meal_count}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
