@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}{% endblock %}</title>
+  <title>АдминеПанель: {% block title %}{% endblock %}</title>
   {% block head%}{% endblock %}
   <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.css' %}">
   <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
@@ -12,46 +12,39 @@
   <link rel="stylesheet" href="{% static 'admin_app/css/admin_style.css' %}">
   <script defer src="{% static 'js/home/dragscroll.js' %}"></script>
   <script src="{% static 'js/home/jquery-3.7.1.js' %}"></script>
+
   <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
-  <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   {% block extra_head %}{% endblock %}
   {% include 'home/css/style.html'%}
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 container-fluid">
 
   {% include 'admin_app/elements/header.html' %}
 
-  <section class="mb-4 d-flex">
+  <section class="mb-4 d-flex justify-content-between">
 
 
 
     {% include 'admin_app/elements/aside.html' %}
 
-    <main class="ms-0 container-xxl" data-bs-spy='scroll' data-bs-smooth-scrool="true" tabindex="0">
-      {% block content%}{% endblock %}
-    </main>
+    <main class="mx-0 container-xxl " data-bs-spy='scroll' data-bs-smooth-scrool="true" tabindex="0">
 
+        {% block content%}{% endblock %}
+
+
+    </main>
+    {% block filter %}{% endblock %}
   </section>
+
   {% include 'home/elements/footer.html' %}
   <script src="{% static 'js/bootstrap/bootstrap.bundle.js' %}"></script>
   <script src="{% static 'js/home/center_nav.js'%}"></script>
   <script src="{% static 'admin_app/js/table_height.js' %}"></script>
   {% block extra_body %}
-  <script>
-    $(document).ready(function () {
-      let el_h = $(window).height()
-      let head_h = $('header').outerHeight(true)
-      $('.sticky-under-top').height(el_h - head_h)
-      console.log(head_h)
-      $(window).on('resize', function () {
-        let el_h = $(window).height()
-        let head_h = $('header').outerHeight(true)
-        $('.sticky-under-top').height(el_h - head_h)
-        console.log(head_h)
-      })
-    })
-  </script>
   {% endblock %}
 </body>
 

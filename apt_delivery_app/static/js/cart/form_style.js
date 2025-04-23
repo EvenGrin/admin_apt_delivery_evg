@@ -1,43 +1,29 @@
-window.stylizeForm = function() {
-const form = document.querySelector('form');
-if (form) {
-  const p = form.querySelectorAll('p')
-  p.forEach(p=>{
-    p.outerHTML = "<div class='row mb-2 w-100'>"+p.innerHTML+"</div>"
-  })
-  const inputs = form.querySelectorAll('input[type=email], input[type=password],input[type=date], input[type=time], input[type=datetime-local], input[type=text], textarea');
-  inputs.forEach(input => {
-    input.classList.add('form-control');
-    input.outerHTML = "<div >" + input.outerHTML + "</div>";
-  });
-  const checkbox = form.querySelectorAll('input[type=checkbox]');
-  checkbox.forEach(input => {
+// /// <reference path="jquery.d.ts" />
+// window.stylizeForm = function () {
+//   const form_ = $("form");
+//   if (form_) {
+//     form_.find("p").wrap("<div class='row w-100 is-invalid'></div>");
 
-    input.outerHTML = "<div class='col-6 d-flex align-items-center'>" + input.outerHTML + "</div>";
-  });
-  const labels = form.querySelectorAll('label');
-  labels.forEach(label => {
-    label.classList.add( 'col-form-label');
-  });
+//     form_
+//       .find("input")
+//       .not("[type='checkbox'], [type='radio'], [type='submit'], [type='button'], [type='range'] ")
+//       .addClass("form-control")
+//       .wrap("<div></div>");
 
-  const brs = form.querySelectorAll('br');
-  brs.forEach(br => {
-    br.remove()
-  });
+//     form_.find("select").addClass("form-select");
+//     form_
+//       .find("input[type=checkbox]")
+//       .wrap("<div class='col-6 d-flex align-items-center'></div>");
 
-  const spans = form.querySelectorAll('span');
-  spans.forEach(span => {
-    span.classList.add('my-3');
-  });
+//     form_.find("label").addClass("col-form-label");
 
-  const button = form.querySelector('button');
-  button.classList.add('btn', 'btn-primary', 'btn-block');
+//     form_.find("br").remove();
 
-  const errorlist = form.querySelectorAll('.errorlist');
-  errorlist.forEach(error => {
-    error.classList.add('text-danger', 'm-0', 'mt-3');
-  });
-  form.querySelector('.helptext').classList.add('small')
-}
-}
-stylizeForm();
+//     form_.find("span").addClass("my-3");
+
+//     form_.find(".errorlist").addClass("text-danger m-0 mt-3 invalid-feedback");
+
+//     form_.find(".helptext").addClass("small");
+//   }
+// };
+// stylizeForm();

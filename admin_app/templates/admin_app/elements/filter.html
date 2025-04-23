@@ -1,0 +1,10 @@
+{% load django_bootstrap5 %}
+<div class="">
+    <h3>Фильтры:</h3>
+    <form method="GET" class="" >
+         {% bootstrap_form filter.form  bound_css_class='123' %}
+
+        <button class="btn btn-primary" type="submit">Применить фильтр</button>
+        <a href="?">Сбросить фильтр</a>
+    </form>
+</div>

@@ -1,33 +1,22 @@
-const form = document.querySelector('form');
-if (form) {
-  const p = form.querySelectorAll('p')
-  p.forEach(p=>{
-    p.outerHTML = "<div class='mb-3'>"+p.innerHTML+"</div>"
-  })
-  const inputs = form.querySelectorAll('input, textarea');
-  inputs.forEach(input => {
-    input.classList.add('form-control');
-  });
-  const labels = form.querySelectorAll('label');
-  labels.forEach(label => {
-    label.classList.add( 'form-label');
-  });
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+  "use strict";
 
-  const brs = form.querySelectorAll('br');
-  brs.forEach(br => {
-    br.remove()
-  });
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll(".needs-validation");
 
-  const spans = form.querySelectorAll('span');
-  spans.forEach(span => {
-    span.classList.add('my-3');
+  // Loop over them and prevent submission
+  Array.from(forms).forEach((form) => {
+    form.addEventListener(
+      "submit",
+      (event) => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add("was-validated");
+      },
+      false
+    );
   });
-
-  const button = form.querySelector('button');
-  button.classList.add('btn', 'btn-primary', 'btn-block');
-
-const errorlist = form.querySelectorAll('.errorlist');
-  errorlist.forEach(error => {
-    error.classList.add('text-danger');
-  });
-}
+})();

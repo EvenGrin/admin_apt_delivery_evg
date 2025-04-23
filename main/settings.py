@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    "django_bootstrap5",
+    'django_filters',
     'apt_delivery_app',
     'admin_app',
 ]
@@ -55,7 +57,6 @@ REDIRECT_AUTHENTICATED_EXCLUDE = [
     '/logout/',
     '/media/',
 ]
-
 
 ROOT_URLCONF = 'main.urls'
 
@@ -132,3 +133,9 @@ LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+BOOTSTRAP5 = {
+    'field_renderers': {
+        'default': 'admin_app.views.CustomFieldRenderer',
+    },
+}

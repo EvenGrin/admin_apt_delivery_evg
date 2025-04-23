@@ -8,9 +8,18 @@
 <section data-bs-spy="scroll" data-bs-smooth-scroll="true" class="row" tabindex="0">
     <form id="changelist-search" method="get">
         <div><!-- DIV needed for valid HTML -->
-            <label for="searchbar"><img src="{% static 'admin/img/search.svg' %}" alt="Search"></label>
-            <input type="text" size="40" name="q" value="" id="searchbar" autofocus="">
-            <input type="submit" value="Найти">
+           <div class="row">
+            <label for="searchbar" class="col-auto col-form-label"><img src="{% static 'admin/img/search.svg' %}" alt="Search"></label>
+            <div class="col col-lg-6">
+                <input type="text"  class="form-control " name="q" value="" id="searchbar" autofocus="">
+
+            </div>
+               <div class="col-auto">
+                   <button type="submit" class="btn btn-primary">Найти</button>
+               </div>
+
+            </div>
+
 
         </div>
     </form>

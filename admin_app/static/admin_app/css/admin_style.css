@@ -42,3 +42,26 @@ body {
         margin-left: 0;
     }
 }
+.d-sm-table-cell{
+  display: table-cell;
+}
+@media screen and (max-width: 575px) {
+  .d-sm-table-cell{
+    display: none;
+  }
+  table td, table th {
+    display:inline-block;
+  }
+  table .t-100{
+    width: 100%;
+  }
+  table .t-25{
+    width: 25%;
+  }
+  table thead{
+    position: static !important;
+  }
+  .meals_photo{
+    width: 100% !important;
+  }
+}

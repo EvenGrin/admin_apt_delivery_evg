@@ -1,18 +1,15 @@
 {% extends 'home/base.html'%}
 {% load static %}
+{% load django_bootstrap5 %}
 {% block title %}Регистрация{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-center  ">
-
-    <form method="post" class="w-100 px-5 py-4 rounded-2 shadow bg-white ajaxForm" style="max-width: 800px;" novalidate>
+    <form method="post" class="w-100 px-5 py-4 rounded-2 shadow bg-white ajaxForm needs-validation" style="max-width: 800px;" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
-
+        {% bootstrap_form form %}
         <div class="d-flex justify-content-end">
             <button class="btn btn-primary checkFormBtn">Зарегистрироваться</button>
         </div>
-
     </form>
 </div>
-<script src="{% static 'js/log_reg/register.js'%}"></script>
 {% endblock%}

@@ -19,7 +19,8 @@ class Meal(models.Model):
     )
     image = models.ImageField(
         upload_to='images',
-        verbose_name="Изображение"
+        verbose_name="Изображение",
+        default='meal.png'
     )
     category = models.ForeignKey(
         Category,

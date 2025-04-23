@@ -27,7 +27,7 @@ class Order(models.Model):
     )
     order_date = models.TimeField(
         default=get_default_created_at,
-        verbose_name='Дата и время получения заказа'
+        verbose_name='Время получения заказа'
     )
     status = models.ForeignKey(
         'Status',

@@ -1,0 +1,65 @@
+{% extends 'admin_app/base.html' %}
+{% load static %}
+{% block title %}Блюда{% endblock %}
+{% block content %}
+<h1>Блюда</h1>
+<div class=" rounded border table-responsive sticky-under-top " style="">
+    <table class="table table-hover table-bordered table-striped m-0 ">
+        <thead class="sticky-top z-0 shadow-sm">
+        <tr class="border-top-0">
+            <th class="d-sm-table-cell t-100">Фото</th>
+            <th class="d-sm-table-cell t-100">Название</th>
+            <th class="d-sm-table-cell t-100">Категория</th>
+            <th class="d-sm-table-cell t-25">Цена</th>
+            <th class="d-sm-table-cell t-25">Выход</th>
+            <th class="d-sm-table-cell t-25">К-во</th>
+            <th class="d-sm-table-cell t-25">В заказе</th>
+            <th class="d-sm-table-cell t-25"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+           <td colspan="8" class="t-100">
+               <div class="d-grid">
+               <a href="{% url 'meal-add' %}" class="btn btn-primary">Добавить блюдо</a>
+
+               </div>
+           </td>
+        </tr>
+        {% for meal in meals %}
+
+        <tr>
+            <td class='meals_photo t-25'>
+                <img class='rounded img-thumbnail' src='{{meal.image.url}}'
+                     alt="катринка с блюдом"/>
+            </td>
+            <td class="t-100">{{meal.name}}</td>
+            <td class="t-100">{{meal.category}}</td>
+            <td class="d-inline-block d-sm-none small t-25">Цена</td>
+            <td class="d-inline-block d-sm-none small t-25">Выход</td>
+            <td class="d-inline-block d-sm-none small t-25">К-во</td>
+            <td class="d-inline-block d-sm-none small t-25 text-nowrap">В заказе</td>
+            <td class="t-25">{{meal.price}}</td>
+            <td class="t-25">{{meal.out}}</td>
+            <td class="t-25">{{meal.quantity}}</td>
+            <td class="t-25">{{meal.sold_meal_count}}</td>
+            <td class="t-100">
+                <div class="d-flex flex-wrap gap-3">
+
+                <a href="{% url 'meal-edit' meal.id %}" class="btn btn-primary btn-sm d-flex align-items-end">
+                    <span class="material-icons">edit</span> <span class="d-block d-sm-none d-md-block">Изменить</span></a>
+                <a href="{% url 'meal-delete' meal.id %}" class="btn btn-danger btn-sm d-flex align-items-end">
+                    <span class="material-icons-outlined">close</span> <span class="d-block d-sm-none d-md-block">Удалить</span></a>
+                </div>
+            </td>
+        </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+{% block filter %}
+{% include 'admin_app/elements/filter.html' %}
+{% endblock %}

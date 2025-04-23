@@ -13,11 +13,11 @@
         <div class="offcanvas-body">
             <div class="btn-group-vertical w-100">
 
-                <a href="{% url 'admin_meal' %}" class="btn btn-primary text-start">
+                <a href="{% url 'meal-list' %}" class="btn btn-primary text-start">
                     Блюда
                 </a>
 
-                <a href="#" class="btn btn-primary text-start">
+                <a href="{% url 'order-list' %}" class="btn btn-primary text-start">
                     Заказы
                 </a>
 
@@ -25,17 +25,14 @@
                     Меню
                 </a>
 
-                <a href="{% url 'admin_cab' %}" class="btn btn-primary text-start">
+                <a href="{% url 'cabinet-list' %}" class="btn btn-primary text-start">
                     Кабинеты
                 </a>
 
-                <a href="#" class="btn btn-primary text-start">
+                <a href="{% url 'category-list' %}" class="btn btn-primary text-start">
                     Категории
                 </a>
 
-                <a href="#" class="btn btn-primary text-start">
-                    Меню
-                </a>
 
                 <a href="#" class="btn btn-primary text-start">
                     Пользователи
