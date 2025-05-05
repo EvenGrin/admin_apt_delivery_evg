@@ -59,7 +59,9 @@ def deliver_orders(request, order='-date_create', filter=0):
     context = {}
     context['order'] = order
     context['filter'] = filter
+
     context['count'] = Order.objects.filter(deliver=request.user, status__code__in=['on_way', 'delivered']).count()
+
     context['statuses'] = Status.objects.filter(~Q(id=5))
     orders = Order.objects.filter(deliver=request.user, status__code__in=['on_way', 'delivered']).order_by(order)
     # Все заказы
@@ -68,18 +70,3 @@ def deliver_orders(request, order='-date_create', filter=0):
     context['orders'] = orders  # Фильтруем заказы
     return render(request, 'deliver/order_list.html', context)
 
-
-@group_required('operator')
-@login_required
-def operator_orders(request, order='-date_create', filter=0):
-    context = {}
-    context['order'] = order
-    context['filter'] = filter
-    context['count'] = Order.objects.all().count()
-    context['statuses'] = Status.objects.filter(~Q(id=5))
-    orders = Order.objects.all().order_by(order)
-    # Все заказы
-    if filter:
-        orders = Order.objects.filter( status=filter).order_by(order)
-    context['orders'] = orders  # Фильтруем заказы
-    return render(request, 'deliver/order_list.html', context)

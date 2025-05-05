@@ -29,6 +29,8 @@ class SalesReportFilter(django_filters.FilterSet):
 
 class MealFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(label=_('Название'), lookup_expr='iregex')
+    price = django_filters.RangeFilter(widget=RangeWidget(attrs={'type': 'number'}))
+    category = django_filters.ModelChoiceFilter(queryset=Category.objects.all())
     price = django_filters.RangeFilter(widget=RangeWidget({'min':"0", 'type': 'number'}))
     category = django_filters.ModelChoiceFilter(queryset=Category.objects.all(), empty_label="Все категории")
 

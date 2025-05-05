@@ -5,7 +5,7 @@
         {% ifchanged %}<h3>{{order.date_create|naturalday}}</h3>{% endifchanged %}
 
         <div class="bg-white rounded-2 overflow-hidden shadow-sm mb-3 px-3 py-4">
-            {% if request.user.is_deliver %}
+            {% if user.is_deliver or user.is_operator %}
             <div class="border rounded-top px-3 py-2">
                 {% block deliver %}
                 {% endblock %}
