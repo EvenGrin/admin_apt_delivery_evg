@@ -33,6 +33,7 @@ class Order(models.Model):
         'Status',
         on_delete=models.CASCADE,
         verbose_name='Статус',
+        #  по умолчанию новый
         default=1
     )
     result = models.CharField(

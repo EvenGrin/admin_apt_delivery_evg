@@ -58,6 +58,9 @@ body {
   table .t-25{
     width: 25%;
   }
+  table .t-50{
+    width: 50%;
+  }
   table thead{
     position: static !important;
   }

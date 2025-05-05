@@ -1,3 +1,4 @@
+{% load django_bootstrap5 %}
 <div class="modal fade" id="CreateOrderModal"
      data-bs-backdrop="static" data-bs-keyboard="false"
      tabindex="-1"
@@ -24,7 +25,7 @@
                         </div>
                     </div>
                     <div id="formdiv">
-                       {{ form.as_p }}
+                       {% bootstrap_form form%}
                     </div>
 
                 </div>

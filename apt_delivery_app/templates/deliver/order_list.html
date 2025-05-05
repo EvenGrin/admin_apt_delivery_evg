@@ -1,7 +1,11 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% block title %}Главная{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/deliver/style.css' %}">
+{% endblock %}
 {% block content %}
+{% include 'order/elements/modal.html' %}
 <div class="d-flex justify-content-between flex-wrap align-items-center">
     <h2 class=" ps-0  px-3 py-2">Доставка заказов</h2>
 
@@ -59,6 +63,10 @@
     </div>
 </div>
 {% include 'deliver/elements/deliver_order_item.html'%}
+
+{% endblock %}
+{% block extra_body %}
 <script src="{% static 'js/order/order_view_close.js' %}"></script>
 <script src="{% static 'js/deliver/script.js' %}"></script>
+<script src="{% static 'js/deliver/order_modal.js' %}"></script>
 {% endblock %}

@@ -2,8 +2,8 @@
        class="sticky-top h-100"
        style="top: 4rem;"
 >
-    <div class="offcanvas-lg offcanvas-start text-bg-primary rounded-2 w-100" tabindex="-1" id="aside_models"
-          aria-labelledby="bdSidebarOffcanvasLabel" data-bs-theme="dark">
+    <div class="offcanvas-lg offcanvas-start text-bg-primary rounded-2" tabindex="-1" id="aside_models"
+         aria-labelledby="bdSidebarOffcanvasLabel" data-bs-theme="dark">
         <div class="offcanvas-header border-bottom">
             <!--            <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">Browse docs</h5>-->
             <button type="button" class="btn-close text-white" data-bs-dismiss="offcanvas" aria-label="Close"
@@ -11,8 +11,26 @@
         </div>
 
         <div class="offcanvas-body">
-            <div class="btn-group-vertical w-100">
+            <div class="btn-group-vertical w-100" role="group">
 
+
+                <a class="btn btn-primary text-start" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                   aria-expanded="false" aria-controls="collapseExample">
+                    Отчеты
+                </a>
+
+                <div class="collapse btn-group-vertical" id="collapseExample" role="group">
+                    <a href="{% url 'sales_report' %}" class="btn btn-primary text-start">
+                        по продажам
+                    </a>
+
+                    <a href="{% url 'user_report' %}" class="btn btn-primary text-start">
+                        по пользователям
+                    </a>
+                    <a href="{% url 'courier_report' %}" class="btn btn-primary text-start">
+                        по курьерам
+                    </a>
+                </div>
                 <a href="{% url 'meal-list' %}" class="btn btn-primary text-start">
                     Блюда
                 </a>
@@ -21,7 +39,7 @@
                     Заказы
                 </a>
 
-                <a href="#" class="btn btn-primary text-start">
+                <a href="{% url 'menu-list' %}" class="btn btn-primary text-start">
                     Меню
                 </a>
 

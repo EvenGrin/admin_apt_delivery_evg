@@ -17,9 +17,9 @@ def group_required(*group_name):
             if request.user.groups.all().filter(name__in=group_name).exists():
                 return view_func(request, *args, **kwargs)
             else:
-                return view_func(request, *args, **kwargs)
+                # return view_func(request, *args, **kwargs)
                 # Здесь можно указать любую страницу, куда вы хотите перенаправлять пользователей,
-                # return redirect('/')
+                return redirect('/')
         return wrapper
     return decorator
 

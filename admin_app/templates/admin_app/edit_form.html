@@ -10,6 +10,10 @@
         {% bootstrap_form form %}
         <button type="submit" class="btn btn-primary">Сохранить</button>
         <a href="{{url}}" class="btn btn-secondary">Вернуться назад</a>
+        <a href="{{url}}delete/{{ object.id }}" class="btn btn-danger">
+<!--                    <span class="material-icons-outlined">close</span>-->
+            Удалить
+        </a>
     </form>
 </div>
 {% endblock %}

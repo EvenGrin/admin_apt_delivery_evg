@@ -21,7 +21,14 @@ urlpatterns = [
     path('category/delete/<int:pk>/', views.category_delete_view, name='category-delete'),
 
     path('order/', views.order_list_view, name='order-list'),
+    path('order/<int:pk>', views.order_detail_view, name='order_detail'),
     # path('order/add/', views.order_crud_view, name='order-add'),
     # path('order/edit/<int:pk>/', views.order_crud_view, name='order-edit'),
     # path('order/delete/<int:pk>/', views.order_delete_view, name='order-delete'),
+
+    path ('menu/', views.menu_view, name='menu-list'),
+
+    path('reports/sales_report/', views.sales_report_view, name='sales_report'),
+    path('reports/users_report/', views.user_report_view, name='user_report'),
+    path('reports/couriers_report/', views.courier_report_view, name='courier_report'),
 ]

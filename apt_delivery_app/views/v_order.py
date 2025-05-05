@@ -28,6 +28,17 @@ def order(request, order_by='-date_create', filter=0):
     context['cabs'] = sorted(Cabinet.objects.all(), key=sort_cabs)
     return render(request, 'order/index.html', context)
 
+@login_required
+def order_modal(request, pk=0):
+    context = {'order': Order.objects.get(pk=pk)}
+    context['cabs'] = sorted(Cabinet.objects.all(), key=sort_cabs)
+    return render(request, 'order/elements/order_modal.html', context)
+
+@login_required
+def deliver_order_modal(request, pk=0):
+    context = {'order': Order.objects.get(pk=pk)}
+    context['cabs'] = sorted(Cabinet.objects.all(), key=sort_cabs)
+    return render(request, 'deliver/elements/order_modal.html', context)
 
 @csrf_protect
 @login_required
@@ -111,3 +122,18 @@ def add_to_order(request):
 def sub_from_order(request):
     print('sub_from_cart')
     return update_order_item(request, 'sub')
+
+
+@csrf_exempt
+def cancel_order(request, id):
+    try:
+        # Найти заказ по переданному ID
+        order = Order.objects.get(id=id)
+
+        # Изменить статус заказа на "отменён"
+        order.status = Status.objects.get(code='canceled')
+        order.save()
+
+        return JsonResponse({'message': 'Заказ успешно отменён'}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)

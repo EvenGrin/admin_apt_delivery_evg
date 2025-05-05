@@ -12,7 +12,7 @@ limit = 10  # ограничение количества взятия зака�
 @login_required
 def take_order(request):
     order_id = request.GET['order_id']
-    count = Order.objects.filter(status__in=[4], deliver=request.user).count()
+    count = Order.objects.filter(status__in=[2], deliver=request.user).count()
     # print(count)
     if (Order.objects.filter(id=order_id, cab=0)):
         return JsonResponse({'message': 'Нельзя взять заказы с самовыносом', 'count': count})
@@ -46,10 +46,10 @@ def take_order_list(request, order='-date_create', filter=0):
     context = {}
     context['order'] = order
     context['filter'] = filter
-    count = Order.objects.filter(status__in=[4], deliver=request.user).count()
+    count = Order.objects.filter(status__in=[2], deliver=request.user).count()
     context['count'] = 'взято '+str(count)
     # заказы, которые не самовынос, без курьера, со статусом новый подтвержден, собран
-    context['orders'] = Order.objects.filter(~Q(cab=0), status__in=[4], deliver=None).order_by(
+    context['orders'] = Order.objects.filter(~Q(cab=0), status__in=[2], deliver=None).order_by(
         order)  # Фильтруем заказы
     return render(request, 'deliver/take_order_list.html', context)
 
@@ -59,11 +59,27 @@ def deliver_orders(request, order='-date_create', filter=0):
     context = {}
     context['order'] = order
     context['filter'] = filter
-    context['count'] = Order.objects.filter(deliver=request.user).count()
+    context['count'] = Order.objects.filter(deliver=request.user, status__code__in=['on_way', 'delivered']).count()
     context['statuses'] = Status.objects.filter(~Q(id=5))
-    orders = Order.objects.filter(deliver=request.user).order_by(order)
+    orders = Order.objects.filter(deliver=request.user, status__code__in=['on_way', 'delivered']).order_by(order)
     # Все заказы
     if filter:
-        orders = Order.objects.filter(deliver=request.user, status=filter).order_by(order)
+        orders = Order.objects.filter(deliver=request.user, status=filter, status__code__in=['on_way', 'delivered']).order_by(order)
+    context['orders'] = orders  # Фильтруем заказы
+    return render(request, 'deliver/order_list.html', context)
+
+
+@group_required('operator')
+@login_required
+def operator_orders(request, order='-date_create', filter=0):
+    context = {}
+    context['order'] = order
+    context['filter'] = filter
+    context['count'] = Order.objects.all().count()
+    context['statuses'] = Status.objects.filter(~Q(id=5))
+    orders = Order.objects.all().order_by(order)
+    # Все заказы
+    if filter:
+        orders = Order.objects.filter( status=filter).order_by(order)
     context['orders'] = orders  # Фильтруем заказы
     return render(request, 'deliver/order_list.html', context)

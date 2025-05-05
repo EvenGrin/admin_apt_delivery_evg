@@ -6,10 +6,14 @@
                     data-bs-toggle="offcanvas" type="button">
                 <span class="bi bi-three-dots"></span>
             </button>
-            <a class="navbar-brand d-flex align-items-center" href="{% url 'admin_home' %}">АдминАптДоставка <span class="material-icons"> admin_panel_settings</span></a>
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'admin_home' %}">АдминАптДоставка <span
+                    class="material-icons"> admin_panel_settings</span></a>
 
-
-
+            <button aria-controls="navbarOffcanvasLg" aria-label="Toggle navigation" class="navbar-toggler"
+                    data-bs-target="#filter_models"
+                    data-bs-toggle="offcanvas" type="button">
+                <i class="bi bi-funnel"></i>
+            </button>
             <div class="form-inline order-lg-3">
                 <ul class="navbar-nav d-flex flex-row align-items-center justify-content-center">
                     {% if request.user.is_authenticated %}
@@ -73,6 +77,7 @@
                     {% endif %}
                 </ul>
             </div>
+
         </div>
     </nav>
 </header>

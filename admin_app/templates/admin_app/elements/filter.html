@@ -1,10 +1,33 @@
 {% load django_bootstrap5 %}
-<div class="">
-    <h3>Фильтры:</h3>
-    <form method="GET" class="" >
-         {% bootstrap_form filter.form  bound_css_class='123' %}
 
-        <button class="btn btn-primary" type="submit">Применить фильтр</button>
-        <a href="?">Сбросить фильтр</a>
-    </form>
+<div class="offcanvas-lg offcanvas-end  " tabindex="-1" id="filter_models"
+     aria-labelledby="bdSidebarOffcanvasLabel">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">Фильтры</h5>
+        <button type="button" class="btn-close " data-bs-dismiss="offcanvas" aria-label="Close"
+                data-bs-target="#filter_models"></button>
+    </div>
+
+    <div class="offcanvas-body">
+        <form method="GET" class="row row-cols-auto align-items-end" id="filter_form">
+
+            {% for field in filter.form %}
+            {% if field.name in 'sort' %}{{field.name}}{% endif %}
+            {% bootstrap_field field field_class='d-inline w-auto mb-3' label_class='d-block me-auto' wrapper_class='' %}
+            {% endfor%}
+
+
+            <!--         {% bootstrap_form filter.form %}-->
+            <div class="">
+                <button class="btn btn-primary mb-3" type="submit">Применить фильтр</button>
+                <a href="?" class="btn border-secondary mb-3">Сбросить фильтр</a>
+            </div>
+            <div>
+
+
+            </div>
+
+
+        </form>
+    </div>
 </div>
