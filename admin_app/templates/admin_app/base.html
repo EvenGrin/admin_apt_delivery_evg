@@ -9,16 +9,15 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-icons-1.11.3/font/bootstrap-icons.css'%}">
-    <link rel="stylesheet" href="{% static 'admin_app/css/admin_style.css' %}">
     <script defer src="{% static 'js/home/dragscroll.js' %}"></script>
     <script src="{% static 'js/home/jquery-3.7.1.js' %}"></script>
-
     <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {% block extra_head %}{% endblock %}
     {% include 'home/css/style.html'%}
+    <link rel="stylesheet" href="{% static 'admin_app/css/admin_style.css' %}">
 </head>
 
 <body class="d-flex flex-column min-vh-100 container-fluid">

@@ -1,18 +1,22 @@
 import json
 from datetime import datetime, timezone
+from typing import Any
 
 from django.db.models import OuterRef, ExpressionWrapper, F, Sum, DecimalField, Subquery, Min, Max, Value, Count
 from django.db.models.functions import TruncDay, Concat
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django_bootstrap5.renderers import FieldRenderer
+from django_filters.views import FilterView
+from django_tables2 import RequestConfig, SingleTableMixin
 
 from admin_app.filters import MealFilter, CategoryFilter, CabinetFilter, OrderFilter, SalesReportFilter
 from admin_app.forms import MealForm, CategoryForm, CabinetForm
+from admin_app.tables import CabinetTable, CategoryTable, MealTable, OrderTable
 from apt_delivery_app.models import Meal, Cabinet, Category, Order, OrderMeal, Menu
 
 
-def generic_list_view(request, model_class, my_filter=None):
+def generic_list_view(request, model_class, my_filter=None, table=None):
     objects = model_class.objects.all().order_by('-id')
     filtered_objects = objects
     if my_filter:
@@ -23,6 +27,9 @@ def generic_list_view(request, model_class, my_filter=None):
         'filter': my_filter,
         'title_plural': model_class._meta.verbose_name_plural,
     }
+    if table:
+        RequestConfig(request).configure(table)
+        context['table'] = table
     return render(request, template_name, context)
 
 
@@ -68,10 +75,21 @@ def index_view(request):
 
 
 #  
-def meal_list_view(request):
-    filter = MealFilter(request.GET, queryset=Meal.objects.all())
-    return generic_list_view(request, Meal, filter)
+# def meal_list_view(request):
+#     filter = MealFilter(request.GET, queryset=Meal.objects.all())
+#     return generic_list_view(request, Meal, filter)
 
+
+class meal_list_view(SingleTableMixin, FilterView):
+    table_class = MealTable
+    model = Meal
+    template_name = "admin_app/list/cabinet_list.html"
+    filterset_class = MealFilter
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title_plural'] = 'Блюда'
+        return context
 
 def meal_crud_view(request, pk=None):
     return crud_view(request, Meal, MealForm, pk)
@@ -81,10 +99,10 @@ def meal_delete_view(request, pk):
     return confirm_delete_view(request, Meal, pk)
 
 
-# 
-def category_list_view(request):
-    filter = CategoryFilter(request.GET, Category.objects.all())
-    return generic_list_view(request, Category, filter)
+#
+# def category_list_view(request):
+#     filter = CategoryFilter(request.GET, Category.objects.all())
+#     return generic_list_view(request, Category, filter)
 
 
 def category_crud_view(request, pk=None):
@@ -95,10 +113,35 @@ def category_delete_view(request, pk):
     return confirm_delete_view(request, Category, pk)
 
 
-# 
-def cabinet_list_view(request):
-    filter = CabinetFilter(request.GET, Cabinet.objects.all())
-    return generic_list_view(request, Cabinet, filter)
+#
+# def cabinet_list_view(request):
+#     table = CabinetTable(Cabinet.objects.all())
+#     filter = CabinetFilter(request.GET, Cabinet.objects.all())
+#     return generic_list_view(request, Cabinet, filter, table)
+
+class category_list_view(SingleTableMixin, FilterView):
+    table_class = CategoryTable
+    model = Category
+    template_name = "admin_app/list/cabinet_list.html"
+
+    filterset_class = CategoryFilter
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title_plural'] = 'Категории'
+        return context
+
+class cabinet_list_view(SingleTableMixin, FilterView):
+    table_class = CabinetTable
+    model = Cabinet
+    template_name = "admin_app/list/cabinet_list.html"
+
+    filterset_class = CabinetFilter
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title_plural'] = 'Кабинеты'
+        return context
 
 
 def cabinet_crud_view(request, pk=None):
@@ -110,9 +153,22 @@ def cabinet_delete_view(request, pk):
 
 
 # 
-def order_list_view(request):
-    filter = OrderFilter(request.GET, Order.objects.all())
-    return generic_list_view(request, Order, filter)
+# def order_list_view(request):
+#     filter = OrderFilter(request.GET, Order.objects.all())
+#     return generic_list_view(request, Order, filter)
+
+
+class order_list_view(SingleTableMixin, FilterView):
+    table_class = OrderTable
+    model = Order
+    template_name = "admin_app/list/order_list.html"
+
+    filterset_class = OrderFilter
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title_plural'] = 'Заказы'
+        return context
 
 def order_detail_view(request, pk):
     return

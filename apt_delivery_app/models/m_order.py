@@ -100,3 +100,19 @@ class Order(models.Model):
 
     def __str__(self):
         return f'№: {self.id},\n покупатель: {self.user},\n дата: {str(self.date_create).split(".")[0]}'
+
+    def confirm(self):
+        from . import Status
+        if self.status.code == 'new':
+            self.status = Status.objects.get(code='confirmed')
+            self.save()
+            return True
+        return False
+
+    def cancel(self):
+        from . import Status
+        if self.status.code in ['new', 'confirmed']:
+            self.status = Status.objects.get(code='canceled')
+            self.save()
+            return True
+        return False

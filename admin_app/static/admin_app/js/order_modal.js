@@ -8,10 +8,12 @@ $(document).ready(function() {
 // Функция для загрузки деталей заказа через AJAX
 function ajaxOrderDetails(orderId) {
     $.ajax({
-        url: `/deliver/deliver_orders/${orderId}/`,
+        url: `/order/${orderId}/`,
         method: 'GET',
-        success: function(response) {
-            displayOrderDetails(response);  // Выводим полученные данные
+        success: function(data) {
+            // displayOrderDetails(response);  // Выводим полученные данные
+            $('#orderModal').modal('show')
+            $('#orderModal .modal-body').html(data)
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error(`Ошибка: ${textStatus}, ${errorThrown}`);

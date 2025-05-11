@@ -53,13 +53,13 @@ body {
     display:inline-block;
   }
   table .t-100{
-    width: 100%;
+    width: 100% !important;
   }
   table .t-25{
-    width: 25%;
+    width: 25% important;
   }
   table .t-50{
-    width: 50%;
+    width: 50% important;
   }
   table thead{
     position: static !important;
@@ -67,4 +67,18 @@ body {
   .meals_photo{
     width: 100% !important;
   }
+}
+
+table thead th.orderable > a {
+    padding-right: 20px;
+    background: url(../../django_tables2/themes/paleblue/img//arrow-inactive-up.png) right center no-repeat;
+}
+table thead th.orderable.asc > a {
+    background-image: url(../../django_tables2/themes/paleblue/img/arrow-active-up.png);
+}
+table thead th.orderable.desc > a {
+    background-image: url(../../django_tables2/themes/paleblue/img//arrow-active-down.png);
+}
+div.table-container{
+    display: block;
 }

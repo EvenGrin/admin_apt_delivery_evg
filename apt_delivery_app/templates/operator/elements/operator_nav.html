@@ -2,13 +2,12 @@
      style="top: 80px;">
     <div class="btn-group overflow-x-auto dragscroll flex-row ">
         <a href="{% url 'operator_orders' %}"
-           class="btn btn-primary rounded-0 d-flex px-4 align-items-center justify-content-center px-4 py-2 {% if 'deliver_orders' in request.path %}disabled{% endif %}">
+           class="btn btn-primary rounded-0 d-flex px-4 align-items-center justify-content-center px-4 py-2 {% if 'orders' in request.path %}disabled{% endif %}">
             Отправка
         </a>
-        <a href="{% url 'deliver' %}"
-           class="btn btn-primary rounded-0 d-flex px-4 align-items-center justify-content-center px-4 py-2 {% if 'order_list' in request.path %}disabled{% endif %}">
+        <a href="{% url 'operator' %}"
+           class="btn btn-primary rounded-0 d-flex px-4 align-items-center justify-content-center px-4 py-2 {% if 'confirm_order_list' in request.path %}disabled{% endif %}">
             Проверка
         </a>
-
     </div>
 </div>

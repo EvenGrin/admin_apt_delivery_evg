@@ -1,8 +1,6 @@
 import os
 from pathlib import Path
 
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,6 +29,7 @@ INSTALLED_APPS = [
     'django_filters',
     'crispy_forms',
     "crispy_bootstrap5",
+    'django_tables2',
     'apt_delivery_app',
     'admin_app',
 ]
@@ -136,3 +135,4 @@ BOOTSTRAP5 = {
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap5-responsive.html"
