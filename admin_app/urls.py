@@ -26,7 +26,7 @@ urlpatterns = [
     # path('order/edit/<int:pk>/', views.order_crud_view, name='order-edit'),
     # path('order/delete/<int:pk>/', views.order_delete_view, name='order-delete'),
 
-    path ('menu/', views.menu_view, name='menu-list'),
+    path ('menu/', views.menu_list_view.as_view(), name='menu-list'),
 
     path('reports/sales_report/', views.sales_report_view, name='sales_report'),
     path('reports/users_report/', views.user_report_view, name='user_report'),

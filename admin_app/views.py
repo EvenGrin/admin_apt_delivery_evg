@@ -10,9 +10,9 @@ from django_bootstrap5.renderers import FieldRenderer
 from django_filters.views import FilterView
 from django_tables2 import RequestConfig, SingleTableMixin
 
-from admin_app.filters import MealFilter, CategoryFilter, CabinetFilter, OrderFilter, SalesReportFilter
-from admin_app.forms import MealForm, CategoryForm, CabinetForm
-from admin_app.tables import CabinetTable, CategoryTable, MealTable, OrderTable
+from admin_app.filters import MealFilter, CategoryFilter, CabinetFilter, OrderFilter, SalesReportFilter, MenuFilter
+from admin_app.forms import MealForm, CategoryForm, CabinetForm, MenuForm
+from admin_app.tables import CabinetTable, CategoryTable, MealTable, OrderTable, MenuTable
 from apt_delivery_app.models import Meal, Cabinet, Category, Order, OrderMeal, Menu
 
 
@@ -175,8 +175,25 @@ def order_detail_view(request, pk):
 
 
 #
-def menu_view(request):
-    return generic_list_view(request, Menu)
+# def menu_view(request):
+#     return generic_list_view(request, Menu)
+
+class menu_list_view(SingleTableMixin, FilterView):
+    table_class = MenuTable
+    model = Menu
+    filterset_class = MenuFilter
+    template_name = "admin_app/list/cabinet_list.html"
+
+
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['title_plural'] = 'Меню'
+        return context
+
+
+def menu_crud_view(request, pk=None):
+    return crud_view(request, Menu, MenuForm, pk)
 
 # 
 # отчет по продажам

@@ -5,7 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from django_filters import widgets
 
 
-from apt_delivery_app.models import Meal, Category, Cabinet, Order, User, Status
+from apt_delivery_app.models import Meal, Category, Cabinet, Order, User, Status, Menu
+
 
 class MyRangeWidget(widgets.RangeWidget):
     def __init__(self, from_attrs=None, to_attrs=None, attrs=None):
@@ -64,3 +65,9 @@ class OrderFilter(django_filters.FilterSet):
     class Meta:
         model = Order
         fields = ['user', 'status', 'date_create']
+
+class MenuFilter(django_filters.FilterSet):
+    date = django_filters.DateFromToRangeFilter(widget=widgets.RangeWidget(attrs={'type': 'date'}))
+    class Meta:
+        model = Menu
+        fields = ['date']

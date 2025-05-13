@@ -3,6 +3,9 @@
 {% block title %}{{ title }}: {% if object %}{{ object }}{% else %}Добавить объект{% endif %}{% endblock %}
 
 {% block content %}
+<div class="d-flex justify-content-center">
+
+
 <div class="card " style="max-width: 600px; padding: 2rem;">
     <h2>{{ title }}: {% if object %}{{ object }}{% else %}Добавить объект{% endif %}</h2>
     <form method="post" enctype="multipart/form-data" novalidate>
@@ -15,5 +18,6 @@
             Удалить
         </a>
     </form>
+</div>
 </div>
 {% endblock %}
