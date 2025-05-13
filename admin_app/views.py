@@ -2,10 +2,12 @@ import json
 from datetime import datetime, timezone
 from typing import Any
 
+from django.contrib.auth.decorators import login_required
 from django.db.models import OuterRef, ExpressionWrapper, F, Sum, DecimalField, Subquery, Min, Max, Value, Count
 from django.db.models.functions import TruncDay, Concat
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django_bootstrap5.renderers import FieldRenderer
 from django_filters.views import FilterView
 from django_tables2 import RequestConfig, SingleTableMixin
@@ -16,21 +18,21 @@ from admin_app.tables import CabinetTable, CategoryTable, MealTable, OrderTable,
 from apt_delivery_app.models import Meal, Cabinet, Category, Order, OrderMeal, Menu
 
 
-def generic_list_view(request, model_class, my_filter=None, table=None):
-    objects = model_class.objects.all().order_by('-id')
-    filtered_objects = objects
-    if my_filter:
-        filtered_objects = my_filter.qs
-    template_name = f'admin_app/list/{model_class.__name__.lower()}_list.html'
-    context = {
-        f'{model_class.__name__.lower()}s': filtered_objects,
-        'filter': my_filter,
-        'title_plural': model_class._meta.verbose_name_plural,
-    }
-    if table:
-        RequestConfig(request).configure(table)
-        context['table'] = table
-    return render(request, template_name, context)
+# def generic_list_view(request, model_class, my_filter=None, table=None):
+#     objects = model_class.objects.all().order_by('-id')
+#     filtered_objects = objects
+#     if my_filter:
+#         filtered_objects = my_filter.qs
+#     template_name = f'admin_app/list/{model_class.__name__.lower()}_list.html'
+#     context = {
+#         f'{model_class.__name__.lower()}s': filtered_objects,
+#         'filter': my_filter,
+#         'title_plural': model_class._meta.verbose_name_plural,
+#     }
+#     if table:
+#         RequestConfig(request).configure(table)
+#         context['table'] = table
+#     return render(request, template_name, context)
 
 
 def crud_view(request, model_class, form_class, pk=None):
@@ -74,12 +76,12 @@ def index_view(request):
     return render(request, 'admin_app/index.html')
 
 
-#  
+#
 # def meal_list_view(request):
 #     filter = MealFilter(request.GET, queryset=Meal.objects.all())
 #     return generic_list_view(request, Meal, filter)
 
-
+@method_decorator(login_required, name='dispatch')
 class meal_list_view(SingleTableMixin, FilterView):
     table_class = MealTable
     model = Meal
@@ -119,6 +121,7 @@ def category_delete_view(request, pk):
 #     filter = CabinetFilter(request.GET, Cabinet.objects.all())
 #     return generic_list_view(request, Cabinet, filter, table)
 
+@method_decorator(login_required, name='dispatch')
 class category_list_view(SingleTableMixin, FilterView):
     table_class = CategoryTable
     model = Category
@@ -131,6 +134,7 @@ class category_list_view(SingleTableMixin, FilterView):
         context['title_plural'] = 'Категории'
         return context
 
+@method_decorator(login_required, name='dispatch')
 class cabinet_list_view(SingleTableMixin, FilterView):
     table_class = CabinetTable
     model = Cabinet
@@ -157,7 +161,7 @@ def cabinet_delete_view(request, pk):
 #     filter = OrderFilter(request.GET, Order.objects.all())
 #     return generic_list_view(request, Order, filter)
 
-
+@method_decorator(login_required, name='dispatch')
 class order_list_view(SingleTableMixin, FilterView):
     table_class = OrderTable
     model = Order
@@ -178,6 +182,7 @@ def order_detail_view(request, pk):
 # def menu_view(request):
 #     return generic_list_view(request, Menu)
 
+@method_decorator(login_required, name='dispatch')
 class menu_list_view(SingleTableMixin, FilterView):
     table_class = MenuTable
     model = Menu
