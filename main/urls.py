@@ -34,6 +34,9 @@ urlpatterns = [
     path('deliver/take_order/', views.take_order, name="take_order"),
     path('deliver/update_status/', views.update_status, name="update_status"),
     #
+    path('api/confirm-payment/', views.confirm_payment, name='confirm_payment'),
+    path('order/<int:order_id>/qr/', views.generate_qr, name='generate_qr'),
+    #
     path('operator/orders/', views.operator_orders, name="operator_orders"),
     path('operator/order/<int:order_id>/confirm/', views.confirm_order, name='confirm_order'),
     path('operator/order/<int:order_id>/cancel/', views.cancel_order, name='cancel_order'),

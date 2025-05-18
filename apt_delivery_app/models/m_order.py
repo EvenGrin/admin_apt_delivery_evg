@@ -116,3 +116,23 @@ class Order(models.Model):
             self.save()
             return True
         return False
+
+    # qr_code
+    is_paid = models.BooleanField(
+        default=False,
+        verbose_name='Оплачен'
+    )
+    qr_code = models.CharField(
+        max_length=100,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name='QR код для подтверждения'
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.qr_code:
+            # Генерируем уникальный код для QR при создании заказа
+            import uuid
+            self.qr_code = f"order_{self.id}_{uuid.uuid4().hex[:6]}"
+        super().save(*args, **kwargs)
