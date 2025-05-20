@@ -1,0 +1,63 @@
+<aside id='aside'
+       class="sticky-top h-100"
+       style="top: 4rem;"
+>
+    <div class="offcanvas-lg offcanvas-start text-bg-primary rounded-2" tabindex="-1" id="aside_models"
+         aria-labelledby="bdSidebarOffcanvasLabel" data-bs-theme="dark">
+        <div class="offcanvas-header border-bottom">
+            <!--            <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">Browse docs</h5>-->
+            <button type="button" class="btn-close text-white" data-bs-dismiss="offcanvas" aria-label="Close"
+                    data-bs-target="#aside_models"></button>
+        </div>
+
+        <div class="offcanvas-body">
+            <div class="btn-group-vertical w-100" role="group">
+
+
+                <a class="btn btn-primary text-start" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                   aria-expanded="false" aria-controls="collapseExample">
+                    Отчеты
+                </a>
+
+                <div class="collapse btn-group-vertical" id="collapseExample" role="group">
+                    <a href="{% url 'sales_report' %}" class="btn btn-primary text-start">
+                        по продажам
+                    </a>
+
+                    <a href="{% url 'user_report' %}" class="btn btn-primary text-start">
+                        по пользователям
+                    </a>
+                    <a href="{% url 'courier_report' %}" class="btn btn-primary text-start">
+                        по курьерам
+                    </a>
+                </div>
+                <a href="{% url 'meal-list' %}" class="btn btn-primary text-start">
+                    Блюда
+                </a>
+
+                <a href="{% url 'order-list' %}" class="btn btn-primary text-start">
+                    Заказы
+                </a>
+
+                <a href="{% url 'menu-list' %}" class="btn btn-primary text-start">
+                    Меню
+                </a>
+
+                <a href="{% url 'cabinet-list' %}" class="btn btn-primary text-start">
+                    Кабинеты
+                </a>
+
+                <a href="{% url 'category-list' %}" class="btn btn-primary text-start">
+                    Категории
+                </a>
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+</aside>

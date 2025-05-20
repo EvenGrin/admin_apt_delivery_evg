@@ -10,8 +10,9 @@ from .models import User, Order, Meal, OrderMeal
 
 
 class RegisterForm(UserCreationForm):
-    rules = forms.CharField(label='я согласен с правилами регистрации',
-                            widget=forms.CheckboxInput(attrs={"class": "form-check-input"}))
+    rules = forms.BooleanField(label='я согласен с правилами регистрации',
+                            widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+                            required=True)
 
     class Meta:
         model = User

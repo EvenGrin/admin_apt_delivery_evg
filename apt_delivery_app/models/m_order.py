@@ -27,12 +27,13 @@ class Order(models.Model):
     )
     order_date = models.TimeField(
         default=get_default_created_at,
-        verbose_name='Дата и время получения заказа'
+        verbose_name='Время получения заказа'
     )
     status = models.ForeignKey(
         'Status',
         on_delete=models.CASCADE,
         verbose_name='Статус',
+        #  по умолчанию новый
         default=1
     )
     result = models.CharField(
@@ -99,3 +100,39 @@ class Order(models.Model):
 
     def __str__(self):
         return f'№: {self.id},\n покупатель: {self.user},\n дата: {str(self.date_create).split(".")[0]}'
+
+    def confirm(self):
+        from . import Status
+        if self.status.code == 'new':
+            self.status = Status.objects.get(code='confirmed')
+            self.save()
+            return True
+        return False
+
+    def cancel(self):
+        from . import Status
+        if self.status.code in ['new', 'confirmed']:
+            self.status = Status.objects.get(code='canceled')
+            self.save()
+            return True
+        return False
+
+    # qr_code
+    is_paid = models.BooleanField(
+        default=False,
+        verbose_name='Оплачен'
+    )
+    qr_code = models.CharField(
+        max_length=100,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name='QR код для подтверждения'
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.qr_code:
+            # Генерируем уникальный код для QR при создании заказа
+            import uuid
+            self.qr_code = f"order_{self.id}_{uuid.uuid4().hex[:6]}"
+        super().save(*args, **kwargs)

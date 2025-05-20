@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 from .m_category import Category
 
 
@@ -18,7 +19,8 @@ class Meal(models.Model):
     )
     image = models.ImageField(
         upload_to='images',
-        verbose_name="Изображение"
+        verbose_name="Изображение",
+        default='meal.png'
     )
     category = models.ForeignKey(
         Category,
@@ -36,6 +38,12 @@ class Meal(models.Model):
         today = timezone.now().date()
         menus = Menu.objects.filter(date=today, meal=self)
         return menus.exists()
+
+
+    def sold_meal_count(self):
+        from . import OrderMeal
+        result = OrderMeal.objects.filter(meal=self).count()
+        return result
 
     class Meta:
         verbose_name = 'Блюдо'

@@ -29,7 +29,7 @@
 /// <reference path="../home/jquery-3.7.1.js" />
 $(document).ready(function () {
   $("form.ajaxForm").on("submit", function (ev) {
-    console.log($("form.ajaxForm").serialize)
+//    console.log($("form.ajaxForm").serialize)
     ev.preventDefault()
     $.ajax({
       url: $(this).attr("action"),
@@ -43,8 +43,6 @@ $(document).ready(function () {
         }
         // response is form in html format
         $("#formdiv").html(response);
-        stylizeForm()
-
       }
   })
   });

@@ -1,0 +1,84 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f9;
+}
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-right: 1px solid #e9ecef;
+    width: 220px;
+    background-color: #fff;
+}
+.content {
+    margin-left: 240px;
+    padding: 10px;
+}
+/* Стили для шапки */
+.navbar {
+    background-color: #007bff;
+    color: white;
+}
+.navbar-brand {
+    color: white !important;
+}
+.navbar-nav > li > a {
+    color: rgba(255, 255, 255, 0.7);
+}
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
+    color: white;
+}
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+    .content {
+        margin-left: 0;
+    }
+}
+.d-sm-table-cell{
+  display: table-cell;
+}
+@media screen and (max-width: 575px) {
+  .d-sm-table-cell{
+    display: none;
+  }
+  table td, table th {
+    display:inline-block;
+  }
+  table .t-100{
+    width: 100% !important;
+  }
+  table .t-25{
+    width: 25% important;
+  }
+  table .t-50{
+    width: 50% important;
+  }
+  table thead{
+    position: static !important;
+  }
+  .meals_photo{
+    width: 100% !important;
+  }
+}
+
+table thead th.orderable > a {
+    padding-right: 20px;
+    background: url(../../django_tables2/themes/paleblue/img//arrow-inactive-up.png) right center no-repeat;
+}
+table thead th.orderable.asc > a {
+    background-image: url(../../django_tables2/themes/paleblue/img/arrow-active-up.png);
+}
+table thead th.orderable.desc > a {
+    background-image: url(../../django_tables2/themes/paleblue/img//arrow-active-down.png);
+}
+div.table-container{
+    display: block;
+}

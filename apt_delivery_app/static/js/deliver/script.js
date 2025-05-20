@@ -11,15 +11,16 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".in_way, .delivered", function (e) {
+        let id = $(this).data("id")
         $.get("/deliver/update_status/", { order_id: $(this).data("id") }, (data) => {
 //        console.log(data)
             if (!jQuery.isEmptyObject(data)) {
                 id = $(this).data("id")
 //                console.log($(this))
                 $(this).html(data.html).addClass(data.class_add).removeClass(data.class_remove)
-                $(`span[data-id = "${id}"]`).html(data.status.status__name)
+                $(`td[data-id = "${id}"]`).html(data.status.status__name)
                 if (data.status.status__id == 7) {
-                $(`span[data-id = "${id}"]`).parent().addClass('btn-success').removeClass('btn-outline-primary')
+                $(`td[data-id = "${id}"]`).addClass('table-success').removeClass('table-secondary')
                 }
 //                console.log(data.status.status__name)
 

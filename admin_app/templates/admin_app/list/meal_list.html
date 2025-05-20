@@ -1,0 +1,48 @@
+{% extends 'admin_app/base.html' %}
+{% load static %}
+{% block title %}{{title_plural}}{% endblock %}
+{% block h1 %}
+<div class="d-flex justify-content-between align-items-center">
+    <h1>{{title_plural}}</h1>
+    <a href="add" class="btn btn-primary ">Добавить</a>
+</div>
+{% endblock%}
+{% block content %}
+<div class=" rounded border table-responsive sticky-under-top " style="">
+    <table class="table table-hover table-bordered table-striped m-0 ">
+        <thead class="sticky-top z-0 shadow-sm">
+        <tr class="border-top-0">
+            <th class="d-sm-table-cell t-100">Фото</th>
+            <th class="d-sm-table-cell t-100">Название</th>
+            <th class="d-sm-table-cell t-100">Категория</th>
+            <th class="d-sm-table-cell t-25">Цена</th>
+            <th class="d-sm-table-cell t-25">Выход</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for meal in meals %}
+        <tr data-id="{{ meal.id }}">
+            <td class='meals_photo t-25'>
+                <img class='rounded img-thumbnail' src='{{meal.image.url}}'
+                     alt="катринка с блюдом"/>
+            </td>
+            <td class="t-100">{{meal.name}}</td>
+            <td class="t-100">{{meal.category}}</td>
+
+            <td class="t-50">{{meal.price}}р</td>
+            <td class="t-50"> <span class="d-inline-block d-sm-none small">Выход</span> {{meal.out}}</td>
+
+        </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+
+{% block extra_body %}
+<script src="{% static 'admin_app/js/redirect_edit.js' %}"></script>
+{% endblock %}

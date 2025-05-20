@@ -1,0 +1,60 @@
+{% extends 'admin_app/base.html' %}
+{% load django_bootstrap5 %}
+{% load render_table from django_tables2 %}
+{% load static %}
+{% load humanize %}
+{% block title %}{{title_plural}}{% endblock %}
+{% block h1 %}
+<h1>{{title_plural}}</h1>
+{% endblock%}
+{% block content %}
+{% include 'admin_app/elements/order_modal.html' %}
+{% render_table table %}
+{% comment %}
+<!--<div class=" rounded border table-responsive sticky-under-top " style="">-->
+<!--    <table id="order-table" class="table table-hover table-bordered table-striped m-0 ">-->
+<!--        <thead class="sticky-top z-0 shadow-sm">-->
+<!--        <tr class="border-top-0">-->
+<!--            <th class="d-sm-table-cell t-25">ФИО</th>-->
+<!--            <th class="d-sm-table-cell t-25">Каб.</th>-->
+<!--            <th class="d-sm-table-cell t-25">Время заказа</th>-->
+<!--            <th class="d-sm-table-cell t-25">Доставщик</th>-->
+<!--            <th class="d-sm-table-cell t-25">Статус</th>-->
+<!--            <th class="d-sm-table-cell t-25">Сумма</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        {% for order in orders %}-->
+
+<!--        <tr>-->
+<!--            {% ifchanged %}-->
+<!--            <td colspan="6" class="t-100">-->
+<!--                {{order.date_create|naturalday}}-->
+
+<!--            </td>-->
+<!--            {% endifchanged %}-->
+<!--        </tr>-->
+
+<!--        <tr data-order-id="{{order.id}}">-->
+<!--            <td class="t-100">{{order.user}}</td>-->
+<!--            <td class="t-100">{{order.cab}}</td>-->
+<!--            <td class="t-100">{{order.order_date}}</td>-->
+<!--            <td class="t-100">{{order.deliver}}</td>-->
+<!--            <td class="t-100 {% if order.status.id  == 1%} table-primary {% elif order.status.id == 2 or order.status.id == 7 or order.status.id == 5 %} table-success {% elif order.status.id == 3%} table-danger {% else %}table-secondary{%endif%}">-->
+<!--                {{order.status}}-->
+<!--            </td>-->
+<!--            <td class="t-100">{{order.total_amount}}</td>-->
+
+<!--        </tr>-->
+
+<!--        {% endfor %}-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
+{% endcomment %}
+{% endblock %}
+{% block extra_body %}
+<script src="{% static 'admin_app/js/order_modal.js' %}"></script>
+{% endblock %}
+
+

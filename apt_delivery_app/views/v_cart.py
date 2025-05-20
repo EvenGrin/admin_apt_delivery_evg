@@ -1,6 +1,8 @@
 # Create your views here.
 import json
 import re
+
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
@@ -14,12 +16,14 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django_bootstrap5.templatetags import django_bootstrap5
 
 from apt_delivery_app.forms import CreateOrderForm
 from apt_delivery_app.models import Cart, Order, Cabinet, OrderMeal, Meal
 
 @csrf_protect
 @login_required
+# пользователь создает заказ
 def make_order(request):
     if request.method == 'POST':
         cab_pk = request.POST.get("cab")  # Получаем идентификатор кабинета
@@ -105,7 +109,7 @@ def make_order(request):
 
     else:
         form = CreateOrderForm()
-    return HttpResponse(form.as_p())
+    return HttpResponse(django_bootstrap5.bootstrap_form(form))
 
 
 def get_cart_data(user):

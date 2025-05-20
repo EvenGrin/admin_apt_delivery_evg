@@ -1,0 +1,34 @@
+{% extends 'admin_app/base.html' %}
+{% load static %}
+{% block title %}{{title_plural}}{% endblock %}
+{% block h1 %}
+<div class="d-flex justify-content-between align-items-center">
+    <h1>{{title_plural}}</h1>
+    <a href="add" class="btn btn-primary ">Добавить</a>
+</div>
+{% endblock%}
+
+{% block content %}
+<div class=" rounded border table-responsive sticky-under-top" style="">
+    <table class="table table-hover table-bordered table-striped m-0 ">
+        <thead class="sticky-top z-0 shadow-sm">
+        <tr class="border-top-0">
+            <th class="d-sm-table-cell t-100">Название</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for cat in categorys %}
+        <tr data-id="{{cat.id}}">
+            <td class="t-100">{{cat.name}}</td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_body %}
+<script src="{% static 'admin_app/js/redirect_edit.js' %}"></script>
+{% endblock %}

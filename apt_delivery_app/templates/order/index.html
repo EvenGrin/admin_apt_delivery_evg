@@ -16,7 +16,8 @@
 <!--        </div>-->
 <!--    </div>-->
 <!--</div>-->
-
+{% include 'order/elements/modal.html' %}
+{% include 'order/elements/cancel_order_modal.html' %}
 <div class="d-flex justify-content-between flex-wrap align-items-center">
     <h2 class=" ps-0  px-3 py-2">Заказы</h2>
     <div class="d-flex justify-content-end z-1">
@@ -59,6 +60,7 @@
 
 {% endblock %}
 {% block extra_body %}
+<script src="{% static 'js/order/script.js' %}"></script>
 <script>
     let url_add = "{% url 'add_to_order' %}"
     let url_sub = "{% url 'sub_from_order' %}"
@@ -66,8 +68,9 @@
 
 </script>
 <script src="{% static 'js/order/order_view_close.js' %}"></script>
-<script src="{% static 'js/home/add_sub_remove.js' %}">
-</script>
+
+<script src="{% static 'js/home/add_sub_remove.js' %}"></script>
+<script src="{% static 'js/order/order_modal.js' %}"></script>
 <script>
     $(document).ready(function () {
         $(document).submit((ev) => {
@@ -105,3 +108,4 @@
 
 </script>
 {% endblock %}
+

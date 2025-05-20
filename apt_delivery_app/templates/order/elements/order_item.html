@@ -1,149 +1,76 @@
 {% load humanize %}
-{% comment %}
-{% regroup orders by date_create|date:"SHORT_DATE_FORMAT" as order_list %}
-<ul>
-    {% for date in order_list %}
-    <li>{{ date.grouper }}
-        <ul>
-            {% for order in date.list %}
-            <li>{{ order.id }}:
-                <ul>
-                    {% for meal in order.meals %}
-                    <li>
-                        {{meal.meal}}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% endfor %}
-</ul>
-{% endcomment %}
-<div class="accordion row" id="order_accordion">
+<div class="row">
     {% for order in orders%}
-    {% ifchanged %}<h3>{{order.date_create|naturalday}}</h3>{% endifchanged %}
-    <div>
-        <div class="bg-white rounded-2 overflow-hidden shadow-sm mb-3">
-            {% if request.user.is_deliver %}
+    <div class='order-item' data-order-id="{{order.id}}">
+        {% ifchanged %}<h3>{{order.date_create|naturalday}}</h3>{% endifchanged %}
+
+        <div class="bg-white rounded-2 overflow-hidden shadow-sm mb-3 px-3 py-4">
+            {% if user.is_deliver or user.is_operator %}
             <div class="border rounded-top px-3 py-2">
                 {% block deliver %}
                 {% endblock %}
                 <!-- конец для доставщика -->
             </div>
             {% endif%}
-            <div class="accordion-item ">
-                <div class="accordion-header">
-                    <button aria-controls="order_{{ order.id }}"
-                            aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
-                            class="accordion-button {% if not forloop.first %}collapsed{% endif %}"
-                            data-bs-target="#order_{{ order.id }}"
-                            data-bs-toggle="collapse"
-                            type="button">
-                        <div class="row justify-content-center align-items-center w-100">
+            {% block order %}
+            <div class=" ">
+                <div class="row justify-content-center align-items-center w-100">
                             <span class="col-auto fs-4 ">Заказ №
                                 {{ order.id }} на {{order.date_create|naturalday}}</span>
-                            <div class="col">
-                                <div class="row order_view btn-group p-0 m-0 order_info  bg-white"
-                                     data-id="{{ order.id }}">
-                                    <div class="col-auto btn
-                                                {% if order.status.id  == 1%} btn-primary
-                                                {% elif order.status.id == 2 or order.status.id == 7 or order.status.id == 5 %}btn-success
-                                                {% elif order.status.id == 3%}btn-danger
-                                                {% else %}btn-outline-primary{%endif%}">
-                                        Статус: <span data-id="{{order.id}}"> {{ order.status }} </span>
-                                    </div>
-                                    <div class="col-auto btn btn-outline-primary">
-                                        <span>Блюд:</span>
-                                        {{ order.amount }}
-                                    </div>
-                                    <div class=" col-auto btn btn-outline-primary">
-                                        <span>Сумма:</span>
-                                        {{order.total_amount}}р
-                                    </div>
-                                </div>
+                    <div class="col">
+                        <div class="row order_view btn-group p-0 m-0 order_info  bg-white"
+                             data-id="{{ order.id }}">
+                            <div class="col-auto btn {% if order.status.id  == 1%} btn-primary {% elif order.status.id == 2 or order.status.id == 7 or order.status.id == 5 %} btn-success {% elif order.status.id == 3%} btn-danger {% else %}btn-outline-primary{%endif%}">
+                                Статус: <span data-id="{{order.id}}"> {{ order.status }} </span>
                             </div>
-                            <span class="col-auto fs-4">
+                            <div class="col-auto btn btn-outline-primary">
+                                <span>Блюд:</span>
+                                {{ order.amount }}
+                            </div>
+                            <div class=" col-auto btn btn-outline-primary">
+                                <span>Сумма:</span>
+                                {{order.total_amount}}р
+                            </div>
+                        </div>
+                    </div>
+                    <span class="col-auto fs-4">
                                 <div class="row row-cols-1 text-end">
                                     <div class="col ">
                                         {{order.cab}}
                                     </div>
                                     <div class="col">
-                                        на {{ order.order_date }}
+                                        на {{ order.order_date }} <i class="bi bi-clock"></i>
                                     </div>
                                 </div>
                             </span>
-                            {% if order.deliver%}
-                            <div class="deliver-info col-12">
-                                <div class="row">
-                                    <div class="col">Доставщик: {{order.deliver}}</div>
-                                </div>
-                            </div>
-                            {% endif%}
-                            <div class="col-12">
-                                {% if order.user_comment %}
-                                <p>Ваш комментарий: {{order.user_comment}}</p>
-                                {% endif %}
-                                {% if order.result %}
-                                <p>
-                                    Причина отмены:{{order.result}}
-                                </p>
-                                {% endif %}
-                            </div>
+                    {% if order.deliver%}
+                    <div class="deliver-info col-12">
+                        <div class="row">
+                            <div class="col">Доставщик: {{order.deliver}}</div>
                         </div>
-                    </button>
-                </div>
-                <div class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
-                     id="order_{{ order.id }}">
-                    <div class="accordion-body cart" data-id="{{ order.id }}">
-                        {% block order_meal %}
-                        {% if order.status.code == 'new' %}
-                        <form action="" class="row row-cols-1 gap-3 mb-3" data-order-id="{{order.id}}" method="post">
-                            {% csrf_token %}
-                            <div class="col-auto">
-                                <label>Время получения заказа:</label>
-                                <input class="form-control" name="order_date" type="time"
-                                       value="{{order.order_date|date:'H:i' }}">
-                            </div>
-                            <div class="col-auto">
-                                <label>Место доставки:</label>
-                                <select class="form-select" id="cab" name="cab">
-                                    {% for cab in cabs %}
-                                    {% if order.cab.id == cab.id %}
-                                    <option selected value="{{ cab.id }}">
-                                        {{ cab.num }} | {{ cab.name }}
-                                    </option>
-                                    {% else %}
-                                    <option value="{{ cab.id }}">
-                                        {{ cab.num }} | {{ cab.name }}
-                                    </option>
-                                    {% endif %}
-                                    {% endfor %}
-
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label>Комментарий к заказу:</label>
-                                <textarea class="form-control" name="user_comment">{{order.user_comment}}</textarea>
-                            </div>
-
-                            <div class="col-12">
-                                <button class="btn btn-primary order_update" data-order-id="{{order.id}}" type="submit">
-                                    Применить изменения
-                                </button>
-                            </div>
-                        </form>
-                        {% include 'cart/elements/cart_items.html' with carts=order.meals %}
-                        {% else %}
-                        {% for meal in order.meals %}
-                        {% include 'order/elements/order_item_meals.html'%}
-                        {% endfor %}
-                        {% endif %}
-                        {% endblock %}
                     </div>
+                    {% endif%}
+                    <div class="col-12">
+                        {% if order.user_comment %}
+                        <p>Ваш комментарий: {{order.user_comment}}</p>
+                        {% endif %}
+                        {% if order.result %}
+                        <p>
+                            Причина отмены:{{order.result}}
+                        </p>
+                        {% endif %}
+                    </div>
+                    {% if order.status.code == 'new' %}
+                    <div>
+                        <button class="btn btn-danger confirm-cancel-order" data-id="{{order.id}}">Отменить заказ
+                        </button>
+                    </div>
+                    {% endif %}
                 </div>
+
+
             </div>
+            {% endblock %}
         </div>
     </div>
     {% empty %}

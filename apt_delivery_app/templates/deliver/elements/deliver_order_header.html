@@ -1,0 +1,43 @@
+<!-- для доставщика -->
+<table class="order_table table fs-6">
+    <thead>
+    <tr class="">
+        <th scope="col">Номер заказа</th>
+        <th scope="col">Время получения</th>
+        <th scope="col">Получатель</th>
+        <th scope="col">Статус</th>
+        {% if not user.is_deliver %}
+        <th scope="col">Курьер</th>
+        {% endif %}
+        <th scope="col">Место доставки</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="">
+        <td data-label="Номер заказа">{{ order.id}}</td>
+        <td data-label="Время получения">{{order.order_date}}</td>
+        <td data-label="Получатель">{{order.user}}</td>
+        <td data-label="Статус" data-id="{{order.id}}"
+            class="{% if order.status.id  == 1%} table-primary {% elif order.status.id == 2 or order.status.id == 7 or order.status.id == 5 %} table-success {% elif order.status.id == 3%} table-danger {% else %}table-secondary{%endif%}"
+        >{{order.status}}
+        </td>
+        {% if not user.is_deliver %}
+        {% if order.deliver %}
+        <td data-label="Курьер">{{order.deliver}}</td>
+        {% else %}
+        <td data-label="Курьер">Курьер не выбран</td>
+        {% endif %}
+        {% endif %}
+        <td data-label="Место доставки">{{order.cab}}</td>
+    </tr>
+    </tbody>
+</table>
+
+{% if 'order_list' in request.path %}
+<button class="take_order btn btn-primary" data-id="{{order.id}}">Взять</button>
+{% elif 'deliver_order' in request.path %}
+
+{% if order.status.id == 6 %}
+<button class="delivered btn btn-primary" data-id="{{order.id}}">Изменить на доставлен</button>
+{% endif %}
+{% endif %}
