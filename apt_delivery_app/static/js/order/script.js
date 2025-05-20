@@ -30,7 +30,7 @@ $(document).ready(function () {
     currentButton.text("Отмена...").prop("disabled", true);
 
     $.ajax({
-      method: "POST",
+      method: "GET",
       url: "/orders/cancel/" + orderId,
       success: function (response) {
         console.log("Заказ успешно отменён:", response);

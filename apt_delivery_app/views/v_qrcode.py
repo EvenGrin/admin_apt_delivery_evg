@@ -7,12 +7,12 @@ from io import BytesIO
 
 
 def generate_qr(request, order_id):
+
     order = Order.objects.get(id=order_id)
     # URL для подтверждения оплаты
     confirmation_url = request.build_absolute_uri(
         reverse('confirm_payment')
     ) + f"?qr_code={order.qr_code}"
-
     # Генерируем QR-код
     qr = pyqrcode.create(confirmation_url)
 
@@ -25,14 +25,17 @@ def generate_qr(request, order_id):
 
 @csrf_exempt  # Для упрощения, можно заменить на правильную CSRF защиту для API
 def confirm_payment(request):
-    if request.method == 'POST':
-        qr_code = request.POST.get('qr_code')
+    # if request.method == 'POST':
+    #     qr_code = request.POST.get('qr_code')
+    if request.method == 'GET':
+        qr_code = request.GET.get('qr_code')
         try:
             order = Order.objects.get(qr_code=qr_code)
             if not order.is_paid:
                 order.is_paid = True
                 order.save()
-                return JsonResponse({'status': 'success', 'message': 'Оплата подтверждена'})
+                return JsonResponse(
+                    {'status': 'success', 'message': 'Оплата подтверждена'})
             return JsonResponse({'status': 'info', 'message': 'Заказ уже оплачен'})
         except Order.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Заказ не найден'}, status=404)

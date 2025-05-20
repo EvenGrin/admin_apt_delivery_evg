@@ -54,7 +54,7 @@ def confirm_order(request, order_id):
 @login_required
 @group_required('operator')
 @require_POST
-def cancel_order(request, order_id):
+def cancel_operator_order(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     if order.cancel():
         return JsonResponse({

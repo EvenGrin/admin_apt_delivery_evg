@@ -124,7 +124,7 @@ def sub_from_order(request):
     return update_order_item(request, 'sub')
 
 
-@csrf_exempt
+
 def cancel_order(request, id):
     try:
         # Найти заказ по переданному ID
