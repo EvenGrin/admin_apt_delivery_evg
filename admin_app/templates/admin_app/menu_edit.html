@@ -1,0 +1,215 @@
+{% extends 'admin_app/base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">Меню на {{ menu.date|date:"d.m.Y" }}</h3>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMealsModal">
+                    <i class="bi bi-plus-lg"></i> Добавить блюда
+                </button>
+            </div>
+            <div class="card-body">
+                {% if menu_items %}
+                <div class="row">
+                    {% for item in menu_items %}
+                    {% ifchanged %}
+                    <h5 class="col-12">{{item.meal.category}}</h5>
+                    {% endifchanged %}
+
+                    <div class="col-md-6 mb-3">
+                        <div class="selected-dish p-3 border rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-bold">{{ item.meal.name }}</div>
+                                    <div class="d-flex gap-3 mt-2">
+                                        <div>
+                                            <small>Цена:</small>
+                                            <input type="number" value="{{ item.price }}" class="form-control form-control-sm" disabled>
+                                        </div>
+                                        <div>
+                                            <small>Кол-во:</small>
+                                            <input type="number" value="{{ item.quantity }}" class="form-control form-control-sm" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <a href="{% url 'delete_menu_item' menu.id item.id %}" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    В меню пока нет блюд. Нажмите кнопку "Добавить блюда" чтобы начать.
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'menu-list' %}" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Завершить
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно добавления блюд -->
+<div class="modal fade" id="addMealsModal" tabindex="-1" aria-labelledby="addMealsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" action="{% url 'edit_menu' menu.id %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMealsModalLabel">Добавление блюд в меню</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="search-box mb-3">
+                        <input type="text" class="form-control" placeholder="Поиск блюд..." id="mealSearch">
+                    </div>
+
+                    <div class="accordion" id="categoriesAccordion">
+                        {% for category_name, meals in categories.items %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true"
+                                        aria-controls="collapse{{ forloop.counter }}">
+                                    {{ category_name }} ({{ meals|length }})
+                                </button>
+                            </h2>
+                            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse show"
+                                 aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#categoriesAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        {% for meal in meals %}
+                                        <div class="col-md-6 mb-2 meal-item">
+                                            <div class="form-check">
+                                                <input class="form-check-input meal-checkbox" type="checkbox"
+                                                       name="selected_meals" value="{{ meal.id }}" id="meal{{ meal.id }}">
+                                                <label class="form-check-label d-flex justify-content-between w-100"
+                                                       for="meal{{ meal.id }}">
+                                                    <span>{{ meal.name }}</span>
+                                                    <span class="text-muted">{{ meal.price }} ₽</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="alert alert-info">
+                            Нет доступных блюд для добавления
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Добавить выбранные</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_body %}
+<script>
+$(document).ready(function() {
+    // Поиск блюд
+    $('#mealSearch').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        
+        $('.meal-item').each(function() {
+            const mealText = $(this).text().toLowerCase();
+            
+            if (mealText.includes(searchTerm) || searchTerm == '') {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        
+        // Показываем/скрываем заголовки категорий
+        $('.accordion-item').each(function() {
+            const visibleMeals = $(this).find('.meal-item:visible').length;
+            if (visibleMeals > 0 || searchTerm == '') {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+    
+    // Добавляем кнопку "Выбрать все" для каждой категории
+    $('.accordion-header').each(function() {
+        if (!$(this).find('.select-all').length) {
+            const selectAllCheckbox = $('<input>', {
+                type: 'checkbox',
+                class: 'form-check-input select-all',
+                css: { 'margin-left': '10px' }
+            });
+            
+            const selectAllLabel = $('<label>', {
+                class: 'form-check-label small ms-2',
+                text: 'Выбрать все',
+                css: { cursor: 'pointer' }
+            });
+            
+            const container = $('<div>', {
+                class: 'd-inline-block ms-2'
+            }).append(selectAllCheckbox).append(selectAllLabel);
+            
+            $(this).find('.accordion-button').append(container);
+            
+            // Обработчик для "Выбрать все"
+            selectAllCheckbox.on('change', function() {
+                const categoryBody = $(this).closest('.accordion-header').next('.accordion-collapse');
+                categoryBody.find('.meal-checkbox').prop('checked', $(this).prop('checked'));
+            });
+        }
+    });
+    
+    // Закрытие модального окна после успешного добавления
+    $('form', '#addMealsModal').on('submit', function(e) {
+        console.log(123)
+        e.preventDefault();
+        const form = $(this);
+        
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function(data) {
+                console.log(data)
+                if (data.success) {
+                    $('#addMealsModal').modal('hide');
+                    location.reload(); // Перезагружаем страницу для обновления списка
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+    
+    // Сброс поиска и чекбоксов при закрытии модального окна
+    $('#addMealsModal').on('hidden.bs.modal', function() {
+        $('#mealSearch').val('');
+        $('.meal-item').show();
+        $('.accordion-item').show();
+        $('.meal-checkbox').prop('checked', false);
+        $('.select-all').prop('checked', false);
+    });
+});
+</script>
+{% endblock %}

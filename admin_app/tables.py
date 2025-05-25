@@ -60,7 +60,7 @@ class MenuTable(tables.Table):
     class Meta:
         model = Menu
         fields = ('date',)
-
+        order_by = '-date'
         attrs = {
             'class': 'table table-hover table-bordered table-striped m-0 ',
             'td': {'class': 't-100'},

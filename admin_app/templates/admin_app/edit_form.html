@@ -6,18 +6,25 @@
 <div class="d-flex justify-content-center">
 
 
-<div class="card " style="max-width: 600px; padding: 2rem;">
-    <h2>{{ title }}: {% if object %}{{ object }}{% else %}Добавить объект{% endif %}</h2>
-    <form method="post" enctype="multipart/form-data" novalidate>
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <button type="submit" class="btn btn-primary">Сохранить</button>
-        <a href="{{url}}" class="btn btn-secondary">Вернуться назад</a>
-        <a href="{{url}}delete/{{ object.id }}" class="btn btn-danger">
-<!--                    <span class="material-icons-outlined">close</span>-->
-            Удалить
-        </a>
-    </form>
-</div>
+    <div class="card " style="max-width: 600px; padding: 2rem;">
+        <h2>{{ title }}: {% if object %}{{ object }}{% else %}Добавить объект{% endif %}</h2>
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="{{url}}" class="btn btn-secondary">Вернуться назад</a>
+
+            {% with url|add:"add/" as the_url %}
+            {% if not request.get_full_path == the_url %}
+            <a href="{{url}}delete/{{ object.id }}" class="btn btn-danger">
+                <!--                    <span class="material-icons-outlined">close</span>-->
+                Удалить
+            </a>
+            {% endif %}
+            {% endwith %}
+
+
+        </form>
+    </div>
 </div>
 {% endblock %}

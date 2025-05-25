@@ -3,7 +3,7 @@ from django.urls import path
 from admin_app import views
 
 urlpatterns = [
-    path('', views.index_view, name='admin_home'),
+    path('', views.sales_report_view, name='admin_home'),
 
     path('meals/', views.meal_list_view.as_view(), name='meal-list'),
     path('meals/add/', views.meal_crud_view, name='meal-add'),  # Добавление блюда
@@ -27,6 +27,10 @@ urlpatterns = [
     # path('order/delete/<int:pk>/', views.order_delete_view, name='order-delete'),
 
     path ('menu/', views.menu_list_view.as_view(), name='menu-list'),
+    path('menu/add/', views.create_menu, name='create_menu'),
+    path('menu/edit/<int:menu_id>/', views.edit_menu, name='edit_menu'),
+    path('menu/<int:menu_id>/delete-item/<int:item_id>/', views.delete_menu_item, name='delete_menu_item'),
+    path('menu/delete/<int:pk>/', views.MenuDeleteView.as_view(), name='menu_delete'),
 
     path('reports/sales_report/', views.sales_report_view, name='sales_report'),
     path('reports/users_report/', views.user_report_view, name='user_report'),
