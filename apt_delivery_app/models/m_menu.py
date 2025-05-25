@@ -10,6 +10,7 @@ class MenuItem(models.Model):
     quantity = models.PositiveIntegerField(verbose_name="Количество", blank=True, null=True)
     price = models.PositiveIntegerField(verbose_name="Стоимость", blank=True, null=True)
 
+
     def save(self, *args, **kwargs):
         if self.quantity is None:
             self.quantity = self.meal.quantity
@@ -37,6 +38,7 @@ class Menu(models.Model):
         through=MenuItem,
         verbose_name='Блюдо',
     )
+
 
     def __str__(self):
         return str(self.date)

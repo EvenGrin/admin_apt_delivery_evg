@@ -22,6 +22,7 @@ class CabinetTable(tables.Table):
 
 class MealTable(tables.Table):
     image = tables.Column(attrs={'td': {'class': 'meals_photo'}})
+
     class Meta:
         model = Meal
 
@@ -36,9 +37,10 @@ class MealTable(tables.Table):
         row_attrs = {
             "data-id": lambda record: record.id  # Или используйте get_row_attrs()
         }
-    def render_image(self, record, value):
 
+    def render_image(self, record, value):
         return mark_safe(f"<img src='{record.image.url}' class='rounded img-thumbnail t-50' />")
+
 
 class CategoryTable(tables.Table):
     class Meta:
@@ -57,10 +59,12 @@ class CategoryTable(tables.Table):
 
 
 class MenuTable(tables.Table):
+
+    items_count = tables.Column(verbose_name="Кол-во блюд", empty_values=())
     class Meta:
         model = Menu
-        fields = ('date',)
-        order_by = '-date'
+        fields = ("date", "items_count",)
+        order_by = ("-date",)
         attrs = {
             'class': 'table table-hover table-bordered table-striped m-0 ',
             'td': {'class': 't-100'},
@@ -70,6 +74,12 @@ class MenuTable(tables.Table):
         row_attrs = {
             "data-id": lambda record: record.id  # Или используйте get_row_attrs()
         }
+
+    def render_items_count(self, record):
+        return record.menu_items.count()  # Изменили с items на menu_items
+
+
+
 
 
 
@@ -94,7 +104,6 @@ class OrderTable(tables.Table):
     class Meta:
         model = Order
         fields = ('user', 'cab', 'order_date', 'deliver', 'status', 'total_amount')
-
 
         attrs = {
             'id': 'order-table',

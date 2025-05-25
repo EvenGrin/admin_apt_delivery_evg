@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.http import JsonResponse
 
 from django.shortcuts import get_object_or_404, redirect, render
@@ -25,7 +26,8 @@ class menu_list_view(SingleTableMixin, FilterView):
     filterset_class = MenuFilter
     template_name = "admin_app/list/cabinet_list.html"
 
-
+    def get_queryset(self):
+        return Menu.objects.annotate(items_count=Count('menu_items')).order_by('-date')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
