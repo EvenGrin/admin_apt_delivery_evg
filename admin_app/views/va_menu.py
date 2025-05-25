@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.http import JsonResponse
 
@@ -19,7 +19,7 @@ from apt_delivery_app.models import Menu, Meal
 from apt_delivery_app.models.m_menu import MenuItem
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
 class menu_list_view(SingleTableMixin, FilterView):
     table_class = MenuTable
     model = Menu
@@ -34,26 +34,16 @@ class menu_list_view(SingleTableMixin, FilterView):
         context['title_plural'] = 'Меню'
         return context
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def menu_crud_view(request, pk=None):
     return crud_view(request, Menu, MenuForm, pk)
 
 
-# def create_menu(request):
-#     if request.method == 'POST':
-#         form = MenuForm(request.POST)
-#         if form.is_valid():
-#             menu = form.save()
-#             messages.success(request, 'Меню успешно создано. Теперь добавьте блюда.')
-#             return redirect('edit_menu', menu_id=menu.id)
-#     else:
-#         form = MenuForm(initial={'date': timezone.now().date()})
-#
-#     return render(request, 'admin_app/edit_form.html', {'form': form})
+@user_passes_test(lambda u: u.is_superuser)
 def create_menu(request):
     return crud_view(request, Menu, MenuForm)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def edit_menu(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
     menu_items = menu.menu_items.select_related('meal').all().order_by('meal__category')
@@ -92,14 +82,14 @@ def edit_menu(request, menu_id):
         'categories': categories,
     })
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def delete_menu_item(request, menu_id, item_id):
     menu_item = get_object_or_404(MenuItem, id=item_id, menu_id=menu_id)
     menu_item.delete()
     messages.success(request, 'Блюдо удалено из меню')
     return redirect('edit_menu', menu_id=menu_id)
 
-
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
 class MenuDeleteView(DeleteView):
     model = Menu
     template_name = 'menu/menu_confirm_delete.html'

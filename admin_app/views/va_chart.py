@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.decorators import user_passes_test
 from django.db.models import OuterRef, ExpressionWrapper, F, Sum, DecimalField, Subquery, Value, Count
 from django.db.models.functions import TruncDay, Concat
 from django.shortcuts import render
@@ -8,6 +9,7 @@ from admin_app.filters import SalesReportFilter
 from apt_delivery_app.models import Meal, Order, OrderMeal
 
 
+@user_passes_test(lambda u: u.is_superuser)
 # отчет по продажам
 def sales_report_view(request):
     filterset = SalesReportFilter(request.GET, queryset=Order.objects.filter(status__code='delivered'))
@@ -50,6 +52,8 @@ def sales_report_view(request):
     }
     return render(request, 'admin_app/charts/sales_report.html', context)
 
+
+@user_passes_test(lambda u: u.is_superuser)
 def user_report_view(request):
     user_type = request.GET.get('user_type', 'all')  # Default to 'all'
     all_clients = Order.objects.values('user__id').distinct().annotate(
@@ -71,6 +75,8 @@ def user_report_view(request):
     }
     return render(request, 'admin_app/charts/user_report.html', context)
 
+
+@user_passes_test(lambda u: u.is_superuser)
 def courier_report_view(request):
     subquery = OrderMeal.objects.filter(order=OuterRef('pk')).annotate(
         total_price=ExpressionWrapper(F('meal__price') * F('amount'), output_field=DecimalField())

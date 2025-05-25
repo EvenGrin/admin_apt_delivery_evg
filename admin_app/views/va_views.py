@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timezone
 from typing import Any
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import OuterRef, ExpressionWrapper, F, Sum, DecimalField, Subquery, Min, Max, Value, Count
 from django.db.models.functions import TruncDay, Concat
 from django.shortcuts import render, get_object_or_404, redirect
@@ -17,7 +17,7 @@ from admin_app.forms import MealForm, CategoryForm, CabinetForm, MenuForm
 from admin_app.tables import CabinetTable, CategoryTable, MealTable, OrderTable, MenuTable
 from apt_delivery_app.models import Meal, Cabinet, Category, Order, OrderMeal, Menu
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def crud_view(request, model_class, form_class, pk=None):
     instance = None
     if pk:
@@ -39,7 +39,7 @@ def crud_view(request, model_class, form_class, pk=None):
     }
     return render(request, 'admin_app/edit_form.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def confirm_delete_view(request, model_class, pk):
     field = get_object_or_404(model_class, pk=pk)
     if request.method == 'POST':
@@ -54,7 +54,7 @@ def confirm_delete_view(request, model_class, pk):
 
 
 # Create your views here.
-
+@user_passes_test(lambda u: u.is_superuser)
 def index_view(request):
     return render(request, 'admin_app/index.html')
 
