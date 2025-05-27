@@ -1,5 +1,6 @@
 {% extends 'admin_app/base.html' %}
 {% load django_bootstrap5 %}
+{% load static %}
 {% block content %}
 <div class="row">
     <div class="col-md-12">
@@ -123,5 +124,5 @@
 {% endblock %}
 
 {% block extra_body %}
-<script src="{% static 'admin_app/menu_edit.js' %}"></script>
+<script src="{% static 'admin_app/js/menu_edit.js' %}"></script>
 {% endblock %}
