@@ -14,7 +14,7 @@ def confirm_operator_list(request, order='-date_create', filter=0):
     context['title'] = 'Проверка заказов'
     context['order'] = order
     context['filter'] = filter
-    context['statuses'] = Status.objects.filter(~Q(id=5))
+    context['statuses'] = Status.objects.all()
     context['orders'] = Order.objects.filter(status__code='new').order_by(order)  # Фильтруем заказы
     return render(request, 'operator/order_list.html', context)
 
@@ -26,7 +26,7 @@ def operator_orders(request, order='-date_create', filter=0):
     context['order'] = order
     context['filter'] = filter
     context['count'] = Order.objects.filter(status__code='confirmed').count()
-    context['statuses'] = Status.objects.filter(~Q(id=5))
+    context['statuses'] = Status.objects.all()
     orders = Order.objects.filter(status__code='confirmed').order_by(order)
     # Все заказы
     if filter:
@@ -60,6 +60,30 @@ def cancel_operator_order(request, order_id):
         return JsonResponse({
             'status': 'success',
             'message': 'Заказ успешно отменен!',
+            'new_status': order.status.name,
+            'status_value': order.status.id
+        })
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Невозможно отменить заказ в текущем статусе.'
+    })
+
+@login_required
+@group_required('operator')
+@require_POST
+def change_status(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if order.on_way():
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Заказ успешно изменен на в пути!',
+            'new_status': order.status.name,
+            'status_value': order.status.id
+        })
+    elif order.self_delivery():
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Заказ успешно изменен на готов к выдаче!',
             'new_status': order.status.name,
             'status_value': order.status.id
         })

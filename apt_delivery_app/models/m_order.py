@@ -117,6 +117,22 @@ class Order(models.Model):
             return True
         return False
 
+    def on_way(self):
+        from . import Status
+        if self.status.code in ['confirmed'] and self.cab.id != 0:
+            self.status = Status.objects.get(code='on_way')
+            self.save()
+            return True
+        return False
+
+    def self_delivery(self):
+        from . import Status
+        if self.status.code in ['confirmed'] and self.cab.id == 0:
+            self.status = Status.objects.get(code='self_delivery')
+            self.save()
+            return True
+        return False
+
     # qr_code
     is_paid = models.BooleanField(
         default=False,

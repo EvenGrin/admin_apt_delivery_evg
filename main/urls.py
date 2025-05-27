@@ -39,6 +39,7 @@ urlpatterns = [
     #
     path('operator/orders/', views.operator_orders, name="operator_orders"),
     path('operator/order/<int:order_id>/confirm/', views.confirm_order, name='confirm_order'),
+    path('operator/order/<int:order_id>/change_status/', views.change_status, name='change_status_order'),
     path('operator/order/<int:order_id>/cancel/', views.cancel_operator_order, name='cancel_order'),
     path('operator/confirm_order_list/', views.confirm_operator_list, name="operator"),
     path('operator/confirm_order_list/<str:order>/<int:filter>', views.confirm_operator_list, name="operator"),

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $(document).on("click", ".confirm-order", function () {
+  $(document).on("click", ".confirm-order", function (ev) {
     const orderId = $(this).data("order-id");
     $.ajax({
       url: `/operator/order/${orderId}/confirm/`,
@@ -12,8 +12,9 @@ $(document).ready(function () {
           alert(data.message);
           $(`td[data-id = "${orderId}"]`)
             .html(data.new_status)
-            .addClass("table-success")
+            .addClass("table-secondary")
             .removeClass("table-primary");
+          $(ev.target).remove();
           updateOrderActions(data.status_value, orderId);
         } else {
           alert(data.message);
@@ -25,7 +26,7 @@ $(document).ready(function () {
     });
   });
 
-  $(document).on("click", ".cancel-order", function () {
+  $(document).on("click", ".cancel-order", function (ev) {
     const orderId = $(this).data("order-id");
     $.ajax({
       url: `/operator/order/${orderId}/cancel/`,
@@ -40,7 +41,35 @@ $(document).ready(function () {
             .html(data.new_status)
             .addClass("table-danger")
             .removeClass("table-primary");
+          $(ev.target).remove();
+          $(`button.confirm-order[data-id = "${orderId}"]`).remove();
           updateOrderActions(data.status_value, orderId);
+        } else {
+          alert(data.message);
+        }
+      },
+      error: function (xhr) {
+        alert("Произошла ошибка: " + xhr.responseJSON.message);
+      },
+    });
+  });
+
+  $(document).on("click", ".on_way, .self_delivery", function (ev) {
+    const orderId = $(this).data("order-id");
+    $.ajax({
+      url: `/operator/order/${orderId}/change_status/`,
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrftoken,
+      },
+      success: function (data) {
+        if (data.status === "success") {
+          alert(data.message);
+          $(`td[data-id = "${orderId}"]`)
+            .html(data.new_status)
+            .addClass("table-success")
+            .removeClass("table-primary");
+          $(ev.target).remove();
         } else {
           alert(data.message);
         }

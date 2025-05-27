@@ -53,11 +53,18 @@
 </div>
 {% endif %}
 
+
+
 {% elif 'deliver_order' in request.path %}
 
 {% if order.status.id == 6 %}
 <button class="delivered btn btn-primary" data-id="{{order.id}}">Изменить на доставлен</button>
 {% endif %}
 
-
+{% elif 'operator/orders' in request.path %}
+{% if order.status.code == 'confirmed' and order.cab.id == 0 %}
+<button class="self_delivery btn btn-primary" data-order-id="{{ order.id }}">Изменить на готов к выдаче</button>
+{% elif order.status.code == 'confirmed' and order.cab.id != 0 %}
+<button class="on_way btn btn-primary" data-order-id="{{ order.id }}">Изменить на в пути</button>
+{% endif %}
 {% endif %}
