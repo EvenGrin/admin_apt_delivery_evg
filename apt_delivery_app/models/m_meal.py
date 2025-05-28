@@ -1,10 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-
-from .m_category import Category
-
-
 class Meal(models.Model):
     name = models.CharField(
         max_length=150,
@@ -23,7 +19,7 @@ class Meal(models.Model):
         default='meal.png'
     )
     category = models.ForeignKey(
-        Category,
+        'Category',
         on_delete=models.CASCADE,
         verbose_name="Категория",
         # related_name='meals',

@@ -1,17 +1,15 @@
 from django.db import models
-from .m_meal import Meal
-from .m_user import User
 
 
 class Cart(models.Model):
     user = models.ForeignKey(
-        User,
+        'User',
         default=None,
         on_delete=models.CASCADE,
         verbose_name="Пользователь"
     )
     meal = models.ForeignKey(
-        Meal,
+        'Meal',
         default=None,
         on_delete=models.CASCADE,
         verbose_name="Блюдо"

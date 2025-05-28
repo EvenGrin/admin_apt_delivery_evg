@@ -6,8 +6,7 @@ from django.db.models import Q, Sum
 from django.urls import reverse
 from django.utils import timezone
 
-from .m_cabinet import Cabinet
-from .m_user import User
+
 
 
 def get_default_created_at():
@@ -17,7 +16,7 @@ def get_default_created_at():
 
 class Order(models.Model):
     user = models.ForeignKey(
-        User,
+        'User',
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
     )
@@ -49,13 +48,13 @@ class Order(models.Model):
         help_text='Не обязательное поле'
     )
     cab = models.ForeignKey(
-        Cabinet,
+        'Cabinet',
         on_delete=models.CASCADE,
         verbose_name='Кабинет',
         default=1
     )
     deliver = models.ForeignKey(
-        User,
+        'User',
         on_delete=models.SET_NULL,
         related_name='courier_orders',
         blank=True,

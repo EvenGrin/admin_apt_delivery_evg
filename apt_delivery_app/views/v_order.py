@@ -47,8 +47,8 @@ def order_update(request):
     if request.method == "POST":
         order = Order.objects.get(pk=request.POST.get('pk'))
         order.user_comment = post.get('user_comment')
-        order.order_date = post.get('order_date')
-        order.cab = Cabinet.objects.get(pk=post.get('cab'))
+        order.order_date = post.get('order_date') if post.get('order_date') else order.order_date
+        order.cab = Cabinet.objects.get(pk=post.get('cab')) if post.get('cab') else order.cab
         order.save()
     data = {
         'user_comment': order.user_comment,

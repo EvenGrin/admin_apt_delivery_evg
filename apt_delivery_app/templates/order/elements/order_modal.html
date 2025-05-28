@@ -1,5 +1,5 @@
 {% load humanize %}
-<div class="bg-white rounded-2 overflow-hidden shadow-sm mb-3 px-3 py-4">
+<div class="bg-white rounded-2 overflow-hidden shadow-sm mb-3 px-3 py-4" data-order-id="{{order.id}}">
     {% if user.is_deliver or user.is_operator%}
     <div class="border rounded-top px-3 py-2">
         {% block deliver %}
@@ -32,15 +32,15 @@
                 </div>
             </div>
             <span class="col-auto fs-4">
-                                <div class="row row-cols-1 text-end">
-                                    <div class="col ">
-                                        {{order.cab}}
-                                    </div>
-                                    <div class="col">
-                                        на {{ order.order_date }} <i class="bi bi-clock"></i>
-                                    </div>
-                                </div>
-                            </span>
+                <div class="row row-cols-1 text-end">
+                    <div class="col order-cab">
+                        {{order.cab}}
+                    </div>
+                    <div class="col order-time">
+                        на <span>{{ order.order_date }}</span> <i class="bi bi-clock"></i>
+                    </div>
+                </div>
+            </span>
             {% if order.deliver%}
             <div class="deliver-info col-12">
                 <div class="row">
@@ -66,9 +66,10 @@
 <div class="ordermeal-item"
      id="order_{{ order.id }}">
     <div class=" cart" data-id="{{ order.id }}">
-        {% if order.status.code == 'new' %}
+        {% if order.status.code == 'new' or order.status.code == 'delivered' %}
         <form action="" class="row row-cols-1 gap-3 mb-3" data-order-id="{{order.id}}" method="post">
             {% csrf_token %}
+            {% if order.status.code == 'new' %}
             <div class="col-auto">
                 <label>Время получения заказа:</label>
                 <input class="form-control" name="order_date" type="time"
@@ -95,7 +96,12 @@
                 <label>Комментарий к заказу:</label>
                 <textarea class="form-control" name="user_comment">{{order.user_comment}}</textarea>
             </div>
-
+            {% elif order.status.code == 'delivered' %}
+            <div class="col">
+                <label>Комментарий к заказу:</label>
+                <textarea class="form-control" name="user_comment">{{order.user_comment}}</textarea>
+            </div>
+            {% endif %}
             <div class="col-12">
                 <button class="btn btn-primary order_update" data-order-id="{{order.id}}" type="submit">
                     Применить изменения
