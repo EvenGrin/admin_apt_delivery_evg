@@ -1,0 +1,12 @@
+asgiref==3.8.1
+crispy-bootstrap5==2025.4
+Django==5.2.1
+django-bootstrap5==25.1
+django-crispy-bootstrap==0.1.1.1
+django-crispy-forms==2.4
+django-filter==25.1
+django-tables2==2.7.5
+humanize==4.12.3
+pillow==11.2.1
+PyQRCode==1.2.1
+sqlparse==0.5.3

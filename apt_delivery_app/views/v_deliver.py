@@ -60,10 +60,10 @@ def deliver_orders(request, order='-date_create', filter=0):
     context['order'] = order
     context['filter'] = filter
 
-    context['count'] = Order.objects.filter(deliver=request.user, status__code__in=['on_way', 'delivered']).count()
+    context['count'] = Order.objects.filter(deliver=request.user, status__code__in=['confirmed', 'on_way', 'delivered']).count()
 
     context['statuses'] = Status.objects.filter(~Q(id=5))
-    orders = Order.objects.filter(deliver=request.user, status__code__in=['on_way', 'delivered']).order_by(order)
+    orders = Order.objects.filter(deliver=request.user, status__code__in=['confirmed', 'on_way', 'delivered']).order_by(order)
     # Все заказы
     if filter:
         orders = Order.objects.filter(deliver=request.user, status=filter, status__code__in=['on_way', 'delivered']).order_by(order)

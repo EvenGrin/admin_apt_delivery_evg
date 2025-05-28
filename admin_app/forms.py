@@ -21,7 +21,6 @@ class CabinetForm(forms.ModelForm):
         fields = ['num', 'name']
 
 class MenuForm(forms.ModelForm):
-
     class Meta:
         model = Menu
         fields = ['date']

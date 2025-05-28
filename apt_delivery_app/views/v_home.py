@@ -101,9 +101,15 @@ def menu(request):
                 categorized_meals[meal.category] = []
             categorized_meals[meal.category].append(meal)
     # print(categorized_meals)
+
     context = {
         'categories': Category.objects.all(),
         'categorized_meals': categorized_meals,
         'date': date
     }
+    if request.user.is_authenticated:
+        context['cart_count'] = Cart.objects.filter(user=request.user).count()
+        cart_items = Cart.objects.filter(user=request.user, meal__in=Meal.objects.all()).values('meal_id', 'quantity')
+        context['cart_items'] = cart_items
+        context['cart_items_id'] = [cart_item['meal_id'] for cart_item in cart_items]
     return render(request, 'home/menu.html', context=context)
