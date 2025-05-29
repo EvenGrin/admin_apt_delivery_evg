@@ -50,12 +50,13 @@ def order_update(request):
         order.order_date = post.get('order_date') if post.get('order_date') else order.order_date
         order.cab = Cabinet.objects.get(pk=post.get('cab')) if post.get('cab') else order.cab
         order.save()
+    print(order.cab)
     data = {
-        'user_comment': order.user_comment,
-        'order_date': order.order_date,
-        'cab': order.cab,
+        'order_comment': order.user_comment,
+        'order_time': order.order_date,
+        'order_cab': serializers.serialize('python', [order.cab])[0] if order.cab else None,
     }
-    return HttpResponse(data)
+    return JsonResponse(data)
     # return render(request, 'order/order_update.html', context=context)
 
 
