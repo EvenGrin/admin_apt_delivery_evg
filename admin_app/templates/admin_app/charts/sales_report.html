@@ -1,198 +1,187 @@
-{% extends "admin_app/base.html" %}
-{% load static %}
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/order/Chart.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'admin/css/forms.css' %}"/>
-<link rel="stylesheet" href="{% static 'admin/css/widgets.css' %}"/>
+{% extends "admin_app/base.html" %} {% load static %} {% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/order/Chart.min.css' %}" />
+<link rel="stylesheet" href="{% static 'admin/css/forms.css' %}" />
+<link rel="stylesheet" href="{% static 'admin/css/widgets.css' %}" />
 <script src="{% static 'js/order/dist/Chart.bundle.min.js'%}"></script>
 <script src="{% static 'js/order/dist/moment-with-locales.js'%}"></script>
 <script src="{% static 'js/order/dist/chartjs-adapter-moment.js'%}"></script>
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 
 <div class="mb-5">
-    <h2>Продажи по дням:</h2>
-    <canvas id="salesChart" style="margin-bottom: 30px; width: 60%; height: 50%"></canvas>
+  <h2>Продажи по дням:</h2>
+  <canvas
+    id="salesChart"
+    style="margin-bottom: 30px; width: 60%; height: 50%"
+  ></canvas>
 </div>
 <div class="mb-5">
-    <h2>Продажи по категориям:</h2>
-    <canvas id="categoryChart" style="margin-bottom: 30px; width: 60%; height: 50%"></canvas>
+  <h2>Продажи по категориям:</h2>
+  <canvas
+    id="categoryChart"
+    style="margin-bottom: 30px; width: 60%; height: 50%"
+  ></canvas>
 </div>
 <div class="mb-5">
-    <h2>Продажи по блюдам:</h2>
-    <canvas id="dishChart" width="400" height="200"></canvas>
+  <h2>Продажи по блюдам:</h2>
+  <canvas id="dishChart" width="400" height="200"></canvas>
 </div>
-{% endblock %}
-{% block extra_body %}
+{% endblock %} {% block extra_body %}
 
 <script>
-    const salesData = {{ sales_by_day| safe }};
-    const categoryData = {{ sales_by_category| safe }};
-    const dishData = {{ sales_by_dish| safe }};
-    moment.locale('ru');
+  const salesData = {{ sales_by_day| safe }};
+  const categoryData = {{ sales_by_category| safe }};
+  const dishData = {{ sales_by_dish| safe }};
+  moment.locale('ru');
 
 
-    // Функция для генерации цветов
-    function generateColors(categories) {
-      const colors = {};
-      const predefinedColors = [
-        'rgba(255, 99, 132, 0.2)',// Красный
-        'rgba(255, 159, 64, 0.2)',// Оранжевый
-        'rgba(255, 205, 86, 0.2)',// Желтый
-        'rgba(75, 192, 192, 0.2)',// Зеленый
-        'rgba(54, 162, 235, 0.2)',// Синий
-        'rgba(153, 102, 255, 0.2)',// Фиолетовый
-        'rgba(201, 203, 207, 0.2)',// Серый
-        'rgba(153, 59, 79, 0.3)',// Красный (темнее)
-        'rgba(153, 95, 38, 0.3)',// Оранжевый (темнее)
-        'rgba(153, 123, 52, 0.3)',// Желтый (темнее)
-        'rgba(45, 115, 115, 0.3)',// Зеленый (темнее)
-        'rgba(32, 97, 141, 0.3)',// Синий (темнее)
-        'rgba(92, 61, 153, 0.3)',// Фиолетовый (темнее)
-        'rgba(121, 122, 124, 0.3)',// Серый (темнее)
+  // Функция для генерации цветов
+  function generateColors(categories) {
+    const colors = {};
+    const predefinedColors = [
+      'rgba(255, 99, 132, 0.2)',// Красный
+      'rgba(255, 159, 64, 0.2)',// Оранжевый
+      'rgba(255, 205, 86, 0.2)',// Желтый
+      'rgba(75, 192, 192, 0.2)',// Зеленый
+      'rgba(54, 162, 235, 0.2)',// Синий
+      'rgba(153, 102, 255, 0.2)',// Фиолетовый
+      'rgba(201, 203, 207, 0.2)',// Серый
+      'rgba(153, 59, 79, 0.3)',// Красный (темнее)
+      'rgba(153, 95, 38, 0.3)',// Оранжевый (темнее)
+      'rgba(153, 123, 52, 0.3)',// Желтый (темнее)
+      'rgba(45, 115, 115, 0.3)',// Зеленый (темнее)
+      'rgba(32, 97, 141, 0.3)',// Синий (темнее)
+      'rgba(92, 61, 153, 0.3)',// Фиолетовый (темнее)
+      'rgba(121, 122, 124, 0.3)',// Серый (темнее)
 
-      ];
+    ];
 
-      const predefinedBorders = [
-        'rgb(255, 99, 132)',// Красный
-        'rgb(255, 159, 64)',// Оранжевый
-        'rgb(255, 205, 86)',// Желтый
-        'rgb(75, 192, 192)',// Зеленый
-        'rgb(54, 162, 235)',// Синий
-        'rgb(153, 102, 255)',// Фиолетовый
-        'rgb(201, 203, 207)',// Серый
-        'rgb(153, 59, 79)',// Красный (темнее)
-        'rgb(153, 95, 38)',// Оранжевый (темнее)
-        'rgb(153, 123, 52)',// Желтый (темнее)
-        'rgb(45, 115, 115)',// Зеленый (темнее)
-        'rgb(32, 97, 141)',// Синий (темнее)
-        'rgb(92, 61, 153)',// Фиолетовый (темнее)
-        'rgb(121, 122, 124)'// Серый (темнее)
+    const predefinedBorders = [
+      'rgb(255, 99, 132)',// Красный
+      'rgb(255, 159, 64)',// Оранжевый
+      'rgb(255, 205, 86)',// Желтый
+      'rgb(75, 192, 192)',// Зеленый
+      'rgb(54, 162, 235)',// Синий
+      'rgb(153, 102, 255)',// Фиолетовый
+      'rgb(201, 203, 207)',// Серый
+      'rgb(153, 59, 79)',// Красный (темнее)
+      'rgb(153, 95, 38)',// Оранжевый (темнее)
+      'rgb(153, 123, 52)',// Желтый (темнее)
+      'rgb(45, 115, 115)',// Зеленый (темнее)
+      'rgb(32, 97, 141)',// Синий (темнее)
+      'rgb(92, 61, 153)',// Фиолетовый (темнее)
+      'rgb(121, 122, 124)'// Серый (темнее)
 
-      ];
+    ];
 
-      categories.forEach((category, index) => {
-        colors[category] = {
-          backgroundColor: predefinedColors[index % predefinedColors.length],
-          borderColor: predefinedBorders[index % predefinedBorders.length]
-        };
-      });
-      return colors;
-    }
+    categories.forEach((category, index) => {
+      colors[category] = {
+        backgroundColor: predefinedColors[index % predefinedColors.length],
+        borderColor: predefinedBorders[index % predefinedBorders.length]
+      };
+    });
+    return colors;
+  }
 
 
-    // Получаем уникальные категории
-    const uniqueCategories = [...new Set(categoryData.map(item => item.category__name))];
+  // Получаем уникальные категории
+  const uniqueCategories = [...new Set(categoryData.map(item => item.category__name))];
 
-    // Генерируем палитру цветов на основе категорий
-    const categoryColors = generateColors(uniqueCategories);
+  // Генерируем палитру цветов на основе категорий
+  const categoryColors = generateColors(uniqueCategories);
 
-    const ctxSales = document.getElementById('salesChart').getContext('2d');
-    const salesChart = new Chart(ctxSales, {
-      type: 'line',
-      data: {
-        labels: salesData.map(item => item.date),
-        datasets: [{
-          label: 'Продажи по дням в руб.',
-          data: salesData.map(item => item.total_sales),
-          fill: false,
-          borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1
-        }]
-      },
-      options: {
-        scales: {
-          xAxes: [
-            {
-              type: 'time',
-              time: {
-                tooltipFormat: 'll',
-                unit: 'day',
-                displayFormats: {
-                  day: 'll'
-                }
+  const ctxSales = document.getElementById('salesChart').getContext('2d');
+  const salesChart = new Chart(ctxSales, {
+    type: 'line',
+    data: {
+      labels: salesData.map(item => item.date),
+      datasets: [{
+        label: 'Продажи по дням в руб.',
+        data: salesData.map(item => item.total_sales),
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    },
+    options: {
+      scales: {
+        xAxes: [
+          {
+            type: 'time',
+            time: {
+              tooltipFormat: 'll',
+              unit: 'day',
+              displayFormats: {
+                day: 'll'
               }
             }
-          ],
-          yAxes: [{
-          id: 'y-axis-0',
-          position: 'left',
-          scaleLabel: {
-              display: true,
-              labelString: 'Сумма продаж'
-          },
-          ticks: {
-             beginAtZero: true
           }
-        }, {
-          id: 'y-axis-1',
-          position: 'right',
-            scaleLabel: {
-              display: true,
-              labelString: 'Количество заказов'
-          },
-          ticks: {
-              beginAtZero: true
-           },
-          gridLines: {
-            drawOnChartArea: false
-          }
-        }]
+        ],
+        yAxes: [{
+        id: 'y-axis-0',
+        position: 'left',
+        scaleLabel: {
+            display: true,
+            labelString: 'Сумма продаж'
+        },
+        ticks: {
+           beginAtZero: true
         }
+      }, ]
       }
-    });
+    }
+  });
 
-    const ctxCategory = document.getElementById('categoryChart').getContext('2d');
-    const categoryChart = new Chart(ctxCategory, {
-      type: 'pie',
-      data: {
-        labels: categoryData.map(item => item.category__name),
-        datasets: [{
-          label: 'Продажи по категориям в руб.',
-          data: categoryData.map(item => item.total_sales),
-          backgroundColor: categoryData.map(item => categoryColors[item.category__name].backgroundColor),
-          borderColor: categoryData.map(item => categoryColors[item.category__name].borderColor),
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
+  const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+  const categoryChart = new Chart(ctxCategory, {
+    type: 'pie',
+    data: {
+      labels: categoryData.map(item => item.category__name),
+      datasets: [{
+        label: 'Продажи по категориям в руб.',
+        data: categoryData.map(item => item.total_sales),
+        backgroundColor: categoryData.map(item => categoryColors[item.category__name].backgroundColor),
+        borderColor: categoryData.map(item => categoryColors[item.category__name].borderColor),
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
         }
       }
-    });
-    const ctxDish = document.getElementById('dishChart').getContext('2d');
-    const dishChart = new Chart(ctxDish, {
-      type: 'horizontalBar',
-      data: {
-        labels: dishData.map(item => item.name),
-        datasets: [{
-          label: 'Продажи по блюдам в руб.',
-          data: dishData.map(item => item.total_sales),
-          backgroundColor: dishData.map(item => {
-            const category = categoryData.find(cat => cat.category__name === item.category__name)?.category__name;
-            return category ? categoryColors[category].backgroundColor : 'rgba(0, 0, 0, 0.2)'; // Fallback
-          }),
-          borderColor: dishData.map(item => {
-            const category = categoryData.find(cat => cat.category__name === item.category__name)?.category__name;
-            return category ? categoryColors[category].borderColor : 'rgb(0, 0, 0)'; // Fallback
-          }),
-          borderWidth: 1
+    }
+  });
+  const ctxDish = document.getElementById('dishChart').getContext('2d');
+  const dishChart = new Chart(ctxDish, {
+    type: 'horizontalBar',
+    data: {
+      labels: dishData.map(item => item.name),
+      datasets: [{
+        label: 'Продажи по блюдам в руб.',
+        data: dishData.map(item => item.total_sales),
+        backgroundColor: dishData.map(item => {
+          const category = categoryData.find(cat => cat.category__name === item.category__name)?.category__name;
+          return category ? categoryColors[category].backgroundColor : 'rgba(0, 0, 0, 0.2)'; // Fallback
+        }),
+        borderColor: dishData.map(item => {
+          const category = categoryData.find(cat => cat.category__name === item.category__name)?.category__name;
+          return category ? categoryColors[category].borderColor : 'rgb(0, 0, 0)'; // Fallback
+        }),
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        xAxes: [{  // <--- Используем 'xAxes', если используется 2.x версия Chart.js
+          beginAtZero: true
+        }],
+        yAxes: [{
+          display: true
         }]
-      },
-      options: {
-        scales: {
-          xAxes: [{  // <--- Используем 'xAxes', если используется 2.x версия Chart.js
-            beginAtZero: true
-          }],
-          yAxes: [{
-            display: true
-          }]
-        }
       }
-    });
+    }
+  });
 </script>
 
-{% endblock  %}
+{% endblock %}

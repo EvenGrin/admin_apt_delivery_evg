@@ -82,7 +82,7 @@
                 headers: { "X-CSRFToken": '{{csrf_token}}' },
                 data: $(ev.target).serialize()+ '&pk=' + pk,
                 success: (req) => {
-                    $(`div[data-order-id="${pk}"] .order-comment span`).html(req.order_comment)
+                    $(`div[data-order-id="${pk}"] .order-comment`).html(`Ваш комментарий: ${req.order_comment}`)
                     $(`div[data-order-id="${pk}"] .order-cab`).html(req.order_cab.fields.num)
                     $(`div[data-order-id="${pk}"] .order-time span`).html(req.order_time)
                    

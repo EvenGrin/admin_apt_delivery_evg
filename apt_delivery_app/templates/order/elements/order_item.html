@@ -51,14 +51,12 @@
                     </div>
                     {% endif%}
                     <div class="col-12">
-                        {% if order.user_comment %}
-                        <p class="order-comment">Ваш комментарий: <span>{{order.user_comment}}</span></p>
-                        {% endif %}
-                        {% if order.result %}
+                        <p class="order-comment">{% if order.user_comment %}Ваш комментарий: <span>{{order.user_comment}}</span>{% endif %}</p>
                         <p>
+                            {% if order.result %}
                             Причина отмены:{{order.result}}
+                            {% endif %}
                         </p>
-                        {% endif %}
                     </div>
                     {% if order.status.code == 'new' %}
                     <div>

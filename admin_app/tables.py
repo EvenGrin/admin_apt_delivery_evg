@@ -100,7 +100,7 @@ class OrderTable(tables.Table):
         return css_class
 
     status = tables.Column(attrs={'td': {'class': status_attr}})
-
+    total_amount = tables.Column(verbose_name= 'Сумма заказа')
     class Meta:
         model = Order
         fields = ('user', 'cab', 'order_date', 'deliver', 'status', 'total_amount')
@@ -118,3 +118,4 @@ class OrderTable(tables.Table):
         row_attrs = {
             "data-order-id": lambda record: record.id  # Или используйте get_row_attrs()
         }
+
